@@ -5,7 +5,8 @@
  * create the default database entries.
  */
 function kapi_manager_init_db() {
-//  _kapi_manager_init_products();
+  _kapi_manager_init_products();
+
 
   return _kapi_manager_check_init_db();
 }
