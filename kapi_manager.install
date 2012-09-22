@@ -1,0 +1,36 @@
+<?php
+
+/*
+ * This function implements hook_install()
+ */
+function kapi_manager_install() {
+//  drupal_install_schema('kapi_manager_products');
+  // TODO: install other shemas
+}
+
+/*
+ * This function implements the hook_schema()
+ */
+function kapi_manager_schema() {
+  module_load_include('php', 'kapi_manager', 'schemas');
+  return kapi_manager_getSchemas();
+}
+
+/*
+ * This function implements the hook_enable()
+ */
+function kapi_manager_enable() {
+  drupal_set_message($message = t('gfp_mysql_handler_enable() called successfully'), $type='status');
+  $configured_connections = variable_get('gfp_mysql_handler_configred_connections', NULL);
+  // TODO: open database connection to all configured_connections, which are active.
+
+}
+
+
+/*
+ *
+ */
+function kapi_manager_disable() {
+  drupal_set_message($message = t('gfp_mysql_handler_disable() called successfully'), $type='status');
+  // TODO: close all open database connections
+}
