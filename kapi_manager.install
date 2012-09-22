@@ -21,6 +21,9 @@ function kapi_manager_install() {
   } else {
     drupal_set_message($message = t('Failed to initialize database for Kapi-Manager'), $type='error');
   }
+  $role = new stdClass();
+  $role->name = 'Kapi-Manager Admin';
+  user_role_save($role);
 }
 
 /*
@@ -28,6 +31,12 @@ function kapi_manager_install() {
  */
 function kapi_manager_enable() {
   drupal_set_message($message = t('kapi_manager_enable() called successfully'), $type='status');
-  // TODO: open database connection to all configured_connections, which are active.
+}
 
+
+/*
+ * This function implements the hook_unintall()
+ */
+function kapi_manager_uninstall() {
+  user_role_delete('Kapi-Manager Admin');
 }
