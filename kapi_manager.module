@@ -11,13 +11,70 @@ function kapi_manager_block_info() {
 }
 
 
-
+/*
+ * This function implements hook_block_view()
+ */
 function kapi_manager_block_view($delta='') {
   switch ($delta) {
     case 'kapi_manager':
-      $block['subject'] = t('KM main menu');
-      $block['content'] = t('TODO');
+      $block['subject'] = t('Managing');
+      $block['content']['products'] = array(
+        '#title' => t('See full list of products'),
+        '#url' => 'kapi_manager',
+        '#theme' => 'more_link__kapi_manager',
+      );
       return $block;
       break;
   }
+}
+
+
+
+/*
+ * TODO: documetation
+ */
+function _kapi_manager_page() {
+  drupal_set_title('kapi-manager test page');
+  $result = _kapi_manager_products();
+  foreach ($result as $product) {
+    $items[] = array(
+      'data' => $product->id . "\t" . $product->name,
+    );
+  }
+  $page_array['kapi_manager_arguments'] = array(
+    '#title' => t('List of known products:'),
+    '#items' => $items,
+    '#theme' => 'item_list__kapi_manager',
+  );
+  return $page_array;
+}
+
+
+function _kapi_manager_products() {
+  $query = db_select('kapi_manager_products', 'p')
+    ->fields('p', array('id', 'name'));
+  return $query->execute();
+}
+
+
+function kapi_manager_permission() {
+  return array(
+    'access kapi_manager content' => array(
+      'title' => t('Access content for the Kapi-Manager module.'),
+    ),
+  );
+}
+
+
+function kapi_manager_menu() {
+  $items = array();
+
+  $items['kapi_manager'] = array(
+    'title' => 'Kapi-Manager',
+    'page callback' => '_kapi_manager_page',
+    'access arguments' => array('access kapi_manager content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
 }
