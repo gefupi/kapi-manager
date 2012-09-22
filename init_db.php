@@ -5,7 +5,7 @@
  * create the default database entries.
  */
 function kapi_manager_init_db() {
-  _kapi_manager_init_products();
+//  _kapi_manager_init_products();
 
   return _kapi_manager_check_init_db();
 }
@@ -17,7 +17,8 @@ function kapi_manager_init_db() {
 function _kapi_manager_check_init_db() {
   // TODO
   $product_count = db_query('SELECT COUNT(name) FROM {kapi_manager_products}')->fetchField();
-  if ($product_count == 93) {
+  $dependency_count = db_query('SELECT COUNT(product_id) FROM {kapi_manager_dependencies}')->fetchField();
+  if (($product_count == 93) && ($dependency_count == 230)) {
     return TRUE;
   } else {
     return FALSE;
