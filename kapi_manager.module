@@ -1,5 +1,23 @@
 <?php
 /*
- *
+ * This function implements hook_block_info()
  */
+function kapi_manager_block_info() {
+  $blocks['kapi_manager'] = array(
+    'info'  => t('Kapi-Manager Menu'),
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  return $blocks;
+}
 
+
+
+function kapi_manager_block_view($delta='') {
+  switch ($delta) {
+    case 'kapi_manager':
+      $block['subject'] = t('KM main menu');
+      $block['content'] = t('TODO');
+      return $block;
+      break;
+  }
+}
