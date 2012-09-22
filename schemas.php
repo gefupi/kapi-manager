@@ -69,7 +69,7 @@ function _kapi_manager_getDependenciesSchema() {
         'description' => t('The factor of the dependency product'),
       )
     ),
-    'unique key' => array(
+    'unique keys' => array(
       'dep' => array('product_id', 'dependency_id'),
     ),
     'foreign_keys' => array(
