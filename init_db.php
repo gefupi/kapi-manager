@@ -30,28 +30,26 @@ function _kapi_manager_check_init_db() {
 function _kapi_manager_init_products() {
   // TODO: use english product names
   $products = array(
-    'Wasser', 'Holz', 'Stein', 'Werkzeug', 'Bienenwachs', 'Brote', 'Flachs',
-    'Getreide', 'Honig', 'Käse', 'Kerzen', 'Kräuter', 'Rüben', 'Bier',
-    'Birnenschnaps', 'Met', 'Kirschwasser', 'Schnaps', 'Wein', 'Bibeln',
-    'Bücher', 'Pamphlete', 'Pergamente', 'Schreibfedern', 'Fische', 'Lampenöl',
-    'Muscheln', 'Perlen', 'Räucherfisch', 'Tran', 'Goldgeschmeide',
-    'Heiligenstatuen', 'Muschelketten', 'Perlenketten', 'Silbergeschmeide',
-    'Kohle', 'Pech', 'Gewürze', 'Salz', 'Seide', 'Weihrauch', 'Boote', 'Eisen',
-    'Fuhrwerke', 'Fässer', 'Kandierter Apfel', 'Lebkuchen', 'Mehl', 'Sirup',
-    'Süßes Brot', 'Äpfel', 'Beeren', 'Birnen', 'Kirschen', 'Nüsse', 'Trauben',
-    'Gänsebraten', 'Pökelfleisch', 'Trockenfleisch', 'Wildbret', 'Bänke',
-    'Regale', 'Schränke', 'Stühle', 'Tische', 'Eisenerz', 'Gold', 'Salpeter',
-    'Silber', 'Eier', 'Gänse', 'Hühner', 'Milch', 'Pferde', 'Schweine', 'Wild',
-    'Wolle', 'Ziegen', 'Arkebusen', 'Hellebarde', 'Lederwams', 'Rüstungen',
-    'Schild', 'Schlachtrösser', 'Schwert', 'Daunenbetten', 'Gewänder',
-    'Kleidung', 'Leder', 'Netze', 'Schuhe', 'Teppiche', 'Tuch',
+    'water', 'wood', 'stones', 'tools', 'bees wax', 'bread', 'flax',
+    'grain', 'honey', 'cheese', 'candles', 'herbs', 'beets', 'beer',
+    'pear brandy', 'mead', 'cherry brandy', 'schnapps', 'wine', 'bibles',
+    'books', 'pamphlets', 'parchments', 'quills', 'fish', 'lamp oil',
+    'mussels', 'pearls', 'smoked fish', 'fish oil', 'gold jewellery',
+    'saint statues', 'mussel necklaces', 'pearl necklaces', 'silver jewellery',
+    'coal', 'pitch', 'spices', 'salt', 'silk', 'incense', 'boats', 'iron',
+    'carts', 'casks', 'candied apples', 'gingerbread', 'flour', 'syrup',
+    'sweet bread', 'apples', 'berries', 'pears', 'cherries', 'nuts', 'grapes',
+    'roast goose', 'salt meat', 'dried meat', 'venison', 'benches',
+    'shelves', 'cabinets', 'chairs', 'tables', 'iron ore', 'gold', 'saltpetre',
+    'silver', 'eggs', 'geese', 'chicken', 'milk', 'horses', 'pigs', 'deer',
+    'wool', 'goats', 'arquebuses', 'halberds', 'leather doublet', 'suits of armour',
+    'shields', 'war horses', 'swords', 'eiderdowns', 'clothes',
+    'raiments', 'leather', 'nets', 'shoes', 'carpets', 'drapery',
   );
   $table = 'kapi_manager_products';
   foreach ($products as $product) {
     $record = new stdClass();
-    // TODO use translation function
-    // $record->name = t($product);
-    $record->name = $product;
+    $record->name = t($product);
     drupal_write_record($table, $record);
   }
 }
