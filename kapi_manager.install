@@ -16,14 +16,18 @@ function kapi_manager_schema() {
  */
 function kapi_manager_install() {
   module_load_include('php', 'kapi_manager', 'init_db');
-  kapi_manager_init_db();
+  if (kapi_manager_init_db()) {
+    drupal_set_message($message = t('Kapi-Manager database initialized successfully.'), $type='status');
+  } else {
+    drupal_set_message($message = t('Failed to initialize database for Kapi-Manager'), $type='error');
+  }
 }
 
 /*
  * This function implements the hook_enable()
  */
 function kapi_manager_enable() {
-  drupal_set_message($message = t('gfp_mysql_handler_enable() called successfully'), $type='status');
+  drupal_set_message($message = t('kapi_manager_enable() called successfully'), $type='status');
   // TODO: open database connection to all configured_connections, which are active.
 
 }

@@ -7,7 +7,7 @@
 function kapi_manager_init_db() {
   _kapi_manager_init_products();
 
-//  _kapi_manager_check_init_db();
+  return _kapi_manager_check_init_db();
 }
 
 
@@ -16,6 +16,12 @@ function kapi_manager_init_db() {
  */
 function _kapi_manager_check_init_db() {
   // TODO
+  $product_count = db_query('SELECT COUNT(name) FROM {kapi_manager_products}')->fetchField();
+  if ($product_count == 93) {
+    return TRUE;
+  } else {
+    return FALSE;
+  }
 }
 
 /*
