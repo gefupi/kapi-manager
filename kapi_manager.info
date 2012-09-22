@@ -1,0 +1,9 @@
+name = Kapi-Manager
+description = A module that adds all features for a Kapi-Manager website
+core = 7.x
+
+/*
+configure = admin/config/content/
+
+files[] = current_posts.test
+*/
