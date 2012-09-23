@@ -2,6 +2,7 @@
 /*
  * This function implements hook_block_info()
  */
+/*
 function kapi_manager_block_info() {
   $blocks['kapi_manager'] = array(
     'info'  => t('Kapi-Manager Menu'),
@@ -9,7 +10,7 @@ function kapi_manager_block_info() {
   );
   return $blocks;
 }
-
+*/
 
 /*
  * This function implements hook_block_view()
