@@ -79,6 +79,10 @@ function kapi_manager_permission() {
     'access kapi_manager content' => array(
       'title' => t('Access content for the Kapi-Manager module.'),
     ),
+    'administrate kapi_manager content' => array(
+      'title' => t('Administrate content for the Kapi-Manager module.'),
+      'restrict access' => TRUE,
+    ),
   );
 }
 
