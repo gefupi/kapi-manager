@@ -14,30 +14,24 @@ function kapi_manager_block_info() {
 /*
  * This function implements hook_block_view()
  */
-function kapi_manager_block_view($delta='') {
+/*function kapi_manager_block_view($delta='') {
   switch ($delta) {
     case 'kapi_manager':
       $block['subject'] = t('Managing');
       $items = array();
       $items[] = array(
-        'data' => l('product overview', 'kapi_manager/product_overview'),
+          'data' => l('product overview', 'kapi_manager/admin/product_overview'),
       );
       $block['content']['posts'] = array(
         '#items' => $items,
         '#theme' => 'item_list__kapi_manager__block',
       );
-/*
-      $block['content']['products'] = array(
-        '#title' => t('See full list of products'),
-        '#url' => 'kapi_manager',
-        '#theme' => 'more_link__kapi_manager',
-      );
-*/
+
       return $block;
       break;
   }
 }
-
+*/
 
 
 /*
@@ -93,11 +87,20 @@ function kapi_manager_permission() {
 function kapi_manager_menu() {
   $items = array();
 
-  $items['kapi_manager/product_overview'] = array(
-    'title' => 'Kapi-Manager',
+/*
+  $item['kapi_manager/admin'] = array(
+    'title' => 'administrate',
+    'type' => MENU_NORMAL_ITEM,
+  );
+*/
+
+  $items['kapi_manager/admin/product_overview'] = array(
+    'title' => 'product overview',
     'page callback' => '_kapi_manager_product_overview_page',
     'access arguments' => array('access kapi_manager content'),
-    'type' => MENU_CALLBACK,
+//    'type' => MENU_CALLBACK,
+    'type' => MENU_NORMAL_ITEM,
+//    'type' => MENU_LOCAL_TASK,
   );
 
   return $items;
