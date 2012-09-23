@@ -18,11 +18,21 @@ function kapi_manager_block_view($delta='') {
   switch ($delta) {
     case 'kapi_manager':
       $block['subject'] = t('Managing');
+      $items = array();
+      $items[] = array(
+        'data' => l('product overview', 'kapi_manager/product_overview'),
+      );
+      $block['content']['posts'] = array(
+        '#items' => $items,
+        '#theme' => 'item_list__kapi_manager__block',
+      );
+/*
       $block['content']['products'] = array(
         '#title' => t('See full list of products'),
         '#url' => 'kapi_manager',
         '#theme' => 'more_link__kapi_manager',
       );
+*/
       return $block;
       break;
   }
@@ -31,11 +41,12 @@ function kapi_manager_block_view($delta='') {
 
 
 /*
- * TODO: documetation
+ * This function generates a product overview page.
  */
-function _kapi_manager_page() {
-  drupal_set_title('kapi-manager test page');
+function _kapi_manager_product_overview_page() {
+  drupal_set_title('Product overview');
   $result = _kapi_manager_products();
+  $items = array();
   foreach ($result as $product) {
     $items[] = array(
       'data' => $product->id . "\t" . $product->name,
@@ -50,6 +61,9 @@ function _kapi_manager_page() {
 }
 
 
+/*
+ * This function is returns a ResultSet containing all products from db.
+ */
 function _kapi_manager_products() {
   $query = db_select('kapi_manager_products', 'p')
     ->fields('p', array('id', 'name'));
@@ -57,6 +71,9 @@ function _kapi_manager_products() {
 }
 
 
+/*
+ * This function implements hook_permission()
+ */
 function kapi_manager_permission() {
   return array(
     'access kapi_manager content' => array(
@@ -66,12 +83,15 @@ function kapi_manager_permission() {
 }
 
 
+/*
+ * This function implements hook_menu()
+ */
 function kapi_manager_menu() {
   $items = array();
 
-  $items['kapi_manager'] = array(
+  $items['kapi_manager/product_overview'] = array(
     'title' => 'Kapi-Manager',
-    'page callback' => '_kapi_manager_page',
+    'page callback' => '_kapi_manager_product_overview_page',
     'access arguments' => array('access kapi_manager content'),
     'type' => MENU_CALLBACK,
   );
