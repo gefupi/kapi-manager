@@ -21,6 +21,27 @@ function kapi_manager_install() {
   } else {
     drupal_set_message($message = t('Failed to initialize database for Kapi-Manager.'), $type='error');
   }
+
+  $error = _kapi_manager_setup_roles_and_permissions();
+  if ($error) {
+    drupal_set_message($message = t('Failed to set up role for Kapi-Manager.'), $type='error');
+  } else {
+    drupal_set_message($message = t('Kapi-Manager role and permission setup successful.'), $type='status');
+  }
+
+  $menu = array(
+    'menu_name'   => 'kapi_manager',
+    'title'       => 'Kapi-Manager',
+    'description' => 'This is the menu of the kapi_manager modul.',
+  );
+  menu_save($menu);
+}
+
+
+/*
+ * This function generates all rolespermissons including error checks.
+ */
+function _kapi_manager_setup_roles_and_permissions() {
   $error = FALSE;
   $role = new stdClass();
   $role->name = 'Kapi-Manager Admin';
@@ -35,13 +56,8 @@ function kapi_manager_install() {
       'access kapi_manager content')
     );
   }
-  if ($error) {
-    drupal_set_message($message = t('Failed to set up role for Kapi-Manager.'), $type='error');
-  } else {
-    drupal_set_message($message = t('Kapi-Manager role and permission setup successful.'), $type='status');
-  }
+  return $error;
 }
-
 
 /*
  * This function implements the hook_enable()
@@ -56,4 +72,8 @@ function kapi_manager_enable() {
  */
 function kapi_manager_uninstall() {
   user_role_delete('Kapi-Manager Admin');
+  $menu = menu_load('kapi_manager');
+  if ($menu) {
+    menu_delete($menu);
+  }
 }
