@@ -19,12 +19,29 @@ function kapi_manager_install() {
   if (kapi_manager_init_db()) {
     drupal_set_message($message = t('Kapi-Manager database initialized successfully.'), $type='status');
   } else {
-    drupal_set_message($message = t('Failed to initialize database for Kapi-Manager'), $type='error');
+    drupal_set_message($message = t('Failed to initialize database for Kapi-Manager.'), $type='error');
   }
+  $error = FALSE;
   $role = new stdClass();
   $role->name = 'Kapi-Manager Admin';
-  user_role_save($role);
+  if (!user_role_save($role)) {
+    $error = true;
+  } else {
+    //$rid = user_role_load(DRUPAL_AUTHENTICATED_RID);
+    user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access kapi_manager content'));
+    $rid = user_role_load_by_name($role->name)->rid;
+    user_role_grant_permissions($rid, array(
+      'administrate kapi_manager content',
+      'access kapi_manager content')
+    );
+  }
+  if ($error) {
+    drupal_set_message($message = t('Failed to set up role for Kapi-Manager.'), $type='error');
+  } else {
+    drupal_set_message($message = t('Kapi-Manager role and permission setup successful.'), $type='status');
+  }
 }
+
 
 /*
  * This function implements the hook_enable()
