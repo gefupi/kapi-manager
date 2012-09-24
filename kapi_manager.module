@@ -1,44 +1,8 @@
 <?php
 /*
- * This function implements hook_block_info()
+ * This function generates a page containing the product list.
  */
-/*
-function kapi_manager_block_info() {
-  $blocks['kapi_manager'] = array(
-    'info'  => t('Kapi-Manager Menu'),
-    'cache' => DRUPAL_CACHE_PER_ROLE,
-  );
-  return $blocks;
-}
-*/
-
-/*
- * This function implements hook_block_view()
- */
-/*function kapi_manager_block_view($delta='') {
-  switch ($delta) {
-    case 'kapi_manager':
-      $block['subject'] = t('Managing');
-      $items = array();
-      $items[] = array(
-          'data' => l('product overview', 'kapi_manager/admin/product_overview'),
-      );
-      $block['content']['posts'] = array(
-        '#items' => $items,
-        '#theme' => 'item_list__kapi_manager__block',
-      );
-
-      return $block;
-      break;
-  }
-}
-*/
-
-
-/*
- * This function generates a product overview page.
- */
-function _kapi_manager_product_overview_page() {
+function kapi_manager_list_products_page() {
   drupal_set_title('Product overview');
   $result = _kapi_manager_products();
   $items = array();
@@ -114,39 +78,45 @@ function kapi_manager_menu() {
   $admin_access = array('access kapi_manager content');
   $user_access = array('access kapi_manager content');
 
-
   $items['kapi_manager/admin'] = array(
-    'title' => 'administrate',
-    'description' => 'Administration sites for Kapi-Manager',
+    'title' => 'Administration',
     'page callback' => 'kapi_manager_test_page',
-    'access callback' => TRUE,
-    'access arguments' => array('access kapi_manager content'),
+    'access arguments' => $admin_access,
     'type' => MENU_NORMAL_ITEM,
-//    'type' => MENU_CALLBACK | MENU_IS_ROOT,
-//    'type' => MENU_SUGGESTED_ITEM,
     'menu_name' => 'kapi_manager',
   );
 
-
-  $items['kapi_manager/admin/products'] = array(
-    'title' => 'product overview',
-    'page callback' => '_kapi_manager_product_overview_page',
-    'access callback' => TRUE,
-    'access arguments' => array('access kapi_manager content'),
-//    'type' => MENU_CALLBACK,
-    'type' => MENU_NORMAL_ITEM,
-//    'type' => MENU_LOCAL_TASK | MENU_LINKS_TO_PARENT,
-//    'type' => MENU_DEFAULT_LOCAL_TASK,
-    'menu_name' => 'kapi_manager',
-  );
-
-  $items['kapi_manager/admin/product_overview'] = array(
-    'title' => 'product overview',
-//    'page callback' => '_kapi_manager_product_overview_page',
-    'access callback' => TRUE,
-    'access arguments' => array('access kapi_manager content'),
+  $items['kapi_manager/admin/options'] = array(
+    'title' => 'options',
+    'access arguments' => $admin_access,
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'menu_name' => 'kapi_manager',
+  );
+
+  $items['kapi_manager/admin/products'] = array(
+    'title' => 'Products',
+    'page callback' => 'kapi_manager_list_products_page',
+    'access arguments' => $admin_access,
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'kapi_manager',
+  );
+
+
+  $items['kapi_manager/admin/products/list'] = array(
+    'title' => 'list',
+    'access arguments' => $admin_access,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'menu_name' => 'kapi_manager',
+    'wight' => 0,
+  );
+
+  $items['kapi_manager/admin/products/edit'] = array(
+    'title' => 'edit',
+    'page callback' => 'kapi_manager_edit_products_page',
+    'access arguments' => $admin_access,
+    'type' => MENU_LOCAL_TASK,
+    'menu_name' => 'kapi_manager',
+    'weight' => 1,
   );
 
 
@@ -154,10 +124,9 @@ function kapi_manager_menu() {
     'title' => 'dependency overview',
     'page callback' => '_kapi_manager_dependency_overview_page',
     'access arguments' => $admin_access,
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_NORMAL_ITEM,
     'menu_name' => 'kapi_manager',
   );
-
 
   return $items;
 }
@@ -165,4 +134,8 @@ function kapi_manager_menu() {
 
 function kapi_manager_test_page() {
   return t('Helo! This is a test page.');
+}
+
+function kapi_manager_edit_products_page() {
+  return t('TODO: implement edit product page');
 }
