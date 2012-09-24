@@ -57,6 +57,28 @@ function _kapi_manager_product_overview_page() {
 
 
 /*
+ * This function generates a dependency overview page.
+ */
+ // FIXXXME - TH 20120923 - this function is only for testing purposes
+function _kapi_manager_dependency_overview_page() {
+  drupal_set_title('DEPENDENCY overview (alpha)');
+  $result = _kapi_manager_products();
+  $items = array();
+  foreach ($result as $product) {
+    $items[] = array(
+      'data' => $product->id . "\t" . $product->name,
+    );
+  }
+  $page_array['kapi_manager_arguments'] = array(
+    '#title' => t('List of known dependencies:'),
+    '#items' => $items,
+    '#theme' => 'item_list__kapi_manager',
+  );
+  return $page_array;
+}
+
+
+/*
  * This function is returns a ResultSet containing all products from db.
  */
 function _kapi_manager_products() {
@@ -87,22 +109,60 @@ function kapi_manager_permission() {
  */
 function kapi_manager_menu() {
   $items = array();
+  // TODO: switch admin permission after development
+//  $admin_access = array('access kapi_manager administrate');
+  $admin_access = array('access kapi_manager content');
+  $user_access = array('access kapi_manager content');
 
-/*
-  $item['kapi_manager/admin'] = array(
+
+  $items['kapi_manager/admin'] = array(
     'title' => 'administrate',
+    'description' => 'Administration sites for Kapi-Manager',
+    'page callback' => 'kapi_manager_test_page',
+    'access callback' => TRUE,
+    'access arguments' => array('access kapi_manager content'),
     'type' => MENU_NORMAL_ITEM,
+//    'type' => MENU_CALLBACK | MENU_IS_ROOT,
+//    'type' => MENU_SUGGESTED_ITEM,
+    'menu_name' => 'kapi_manager',
   );
-*/
 
-  $items['kapi_manager/admin/product_overview'] = array(
+
+  $items['kapi_manager/admin/products'] = array(
     'title' => 'product overview',
     'page callback' => '_kapi_manager_product_overview_page',
+    'access callback' => TRUE,
     'access arguments' => array('access kapi_manager content'),
 //    'type' => MENU_CALLBACK,
     'type' => MENU_NORMAL_ITEM,
-//    'type' => MENU_LOCAL_TASK,
+//    'type' => MENU_LOCAL_TASK | MENU_LINKS_TO_PARENT,
+//    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'menu_name' => 'kapi_manager',
   );
 
+  $items['kapi_manager/admin/product_overview'] = array(
+    'title' => 'product overview',
+//    'page callback' => '_kapi_manager_product_overview_page',
+    'access callback' => TRUE,
+    'access arguments' => array('access kapi_manager content'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'menu_name' => 'kapi_manager',
+  );
+
+
+  $items['kapi_manager/admin/dependency_overview'] = array(
+    'title' => 'dependency overview',
+    'page callback' => '_kapi_manager_dependency_overview_page',
+    'access arguments' => $admin_access,
+    'type' => MENU_LOCAL_TASK,
+    'menu_name' => 'kapi_manager',
+  );
+
+
   return $items;
+}
+
+
+function kapi_manager_test_page() {
+  return t('Helo! This is a test page.');
 }
