@@ -3,27 +3,27 @@
  * This function generates a page containing the product list.
  */
 function kapi_manager_list_products_page() {
-  drupal_set_title('Product overview');
-  $result = _kapi_manager_products();
-  $items = array();
+  drupal_set_title('Product');
+  $result = _kapi_manager_get_products();
+  $rows = array();
   foreach ($result as $product) {
-    $items[] = array(
-      'data' => $product->id . "\t" . $product->name,
+    $rows[] = array(
+      array('data' => $product->id,),
+      array('data' => t($product->name),),
     );
   }
-  $page_array['kapi_manager_arguments'] = array(
-    '#title' => t('List of known products:'),
-    '#items' => $items,
-    '#theme' => 'item_list__kapi_manager',
+  $header = array(
+    array('data' => 'id', 'align' => 'center'),
+    array('data' => 'name', 'align' => 'center'),
   );
-  return $page_array;
+  return theme('table', array('header' => $header, 'rows' => $rows));
 }
 
 
 /*
  * This function is returns a ResultSet containing all products from db.
  */
-function _kapi_manager_products() {
+function _kapi_manager_get_products() {
   $query = db_select('kapi_manager_products', 'p')
     ->fields('p', array('id', 'name'));
   return $query->execute();
@@ -32,7 +32,15 @@ function _kapi_manager_products() {
 
 function _kapi_manager_exists_product($product_name) {
   // TODO: implement this function
-  return TRUE;
+  $query = db_select('kapi_manager_products', 'p')
+    ->fields('p', array('name'))
+    ->condition('name', $product_name, 'LIKE')
+    ->execute()
+    ->fetchField();
+  if ($query === $product_name) {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 
@@ -104,13 +112,12 @@ function kapi_manager_menu() {
   );
 
 
-  $items['kapi_manager/admin/product/add'] = array(
+  $items['kapi_manager/admin/products/add'] = array(
     'title' => 'add a product',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('kapi_manager_add_product_form'),
     'access arguments' => $admin_access,
-//    'type' => MENU_CALLBACK,
-    'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_LOCAL_ACTION,
     'menu_name' => 'kapi_manager',
   );
 
@@ -131,7 +138,7 @@ function kapi_manager_add_product_form($node, &$form_state) {
   $form['product_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Product name:'),
-    '#title' => 'Add a product $node = ' . "'$node'.",
+    '#title' => 'Add a product',
     '#default_value' => '',
     '#size' => 35,
     '#maxlength' => 35,
@@ -152,7 +159,8 @@ function kapi_manager_add_product_form_validate($form, &$form_state) {
   if ($product_name === '') {
     form_set_error('product_name', t('You must specify a name for the product'));
   } elseif (_kapi_manager_exists_product($product_name)) {
-    form_set_error('product_name', t('A product with that name already exists.'));
+    form_set_error('product_name', t("A product with name '@product_name' already exists.", 
+    	array('@product_name' => $product_name)));
   }
 }
 
