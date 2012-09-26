@@ -4,8 +4,14 @@
  *   This file provides the menu items of the admin section in kapi_menu.
  */
 
+
 /*
- * TODO: Dokumentation
+ * This functions add the 'administration' section to kapi_manager menu.
+ *
+ * @param items
+ *   reference to an array of menu items
+ * @param admin_access
+ *   an array of access arguments
  */
 function kapi_manager_admin_menu(&$items, $admin_access) {
   $items['kapi_manager/admin'] = array(
@@ -21,13 +27,13 @@ function kapi_manager_admin_menu(&$items, $admin_access) {
 }
 
 /*
- * This functions add the 'workshop' part of administration into kapi_manager 
+ * This functions add the 'workshop' part of administration to kapi_manager
  * menu.
  *
  * @param items
  *   reference to an array of menu items
  * @param admin_access
- *   an array of access arguments 
+ *   an array of access arguments
  */
 function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
   $items['kapi_manager/admin/workshop'] = array(
@@ -67,7 +73,13 @@ function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
 }
 
 /*
- * TODO: Dokumentation
+ * This functions add the 'product' part of administration to kapi_manager
+ * menu.
+ *
+ * @param items
+ *   reference to an array of menu items
+ * @param admin_access
+ *   an array of access arguments
  */
 function _kapi_manager_admin_product_menu(&$items, $admin_access) {
   $items['kapi_manager/admin/products'] = array(
