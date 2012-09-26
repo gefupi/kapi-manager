@@ -5,7 +5,6 @@
  *   with default values.
  */
 
-
 /*
  * This function will be called during modul installation to
  * create the default database entries.
@@ -13,12 +12,11 @@
  * @return boolean
  */
 function kapi_manager_init_db() {
+  _kapi_manager_init_workshops();
   _kapi_manager_init_products();
   _kapi_manager_init_dependencies();
-
   return _kapi_manager_check_init_db();
 }
-
 
 /*
  * This function does some database checks after initialization.
@@ -26,9 +24,11 @@ function kapi_manager_init_db() {
  * @return boolean
  */
 function _kapi_manager_check_init_db() {
-  $product_count = db_query('SELECT COUNT(name) FROM {kapi_manager_products}')->fetchField();
-  $dependency_count = db_query('SELECT COUNT(product_id) FROM {kapi_manager_dependencies}')->fetchField();
-  if (($product_count == 93) && ($dependency_count == 230)) {
+  $workshops_sane = (db_query('SELECT COUNT(id) FROM {kapi_manager_workshops}')->fetchField() == 17);
+  $products_sane = (db_query('SELECT COUNT(id) FROM {kapi_manager_products}')->fetchField() == 93);
+  $dependencies_sane = (db_query('SELECT COUNT(product_id) FROM {kapi_manager_dependencies}')->fetchField() == 230);
+  $db_sane = $workshops_sane && $products_sane && $dependencies_sane;
+  if ($db_sane) {
     return TRUE;
   }
   else {
@@ -37,34 +37,68 @@ function _kapi_manager_check_init_db() {
 }
 
 /*
+ * This function creates the default values for the workshops table.
+ */
+function _kapi_manager_init_workshops() {
+  $workshops = array (
+    'farm', 'brewery', 'printing press', 'fisching hut',
+    'goldsmith', 'lumberjack', 'trade caravan', 'manufactory',
+    'mill bakery', 'fruit picker', 'well', 'butchery', 
+    'joinery', 'stone pit', 'cattle farm', 'armourer',
+    'weaving mill',
+  );
+  $table = 'kapi_manager_workshops';
+  foreach ($workshops as $workshop) {
+    $record = new stdClass();
+    $record->name = t($workshop);
+    drupal_write_record($table, $record);
+  }	
+}
+
+/*
  * This function creates the default values for the products table.
  */
 function _kapi_manager_init_products() {
   $products = array(
-    'water', 'wood', 'stones', 'tools', 'bees wax', 'bread', 'flax',
-    'grain', 'honey', 'cheese', 'candles', 'herbs', 'beets', 'beer',
-    'pear brandy', 'mead', 'cherry brandy', 'schnapps', 'wine', 'bibles',
-    'books', 'pamphlets', 'parchments', 'quills', 'fish', 'lamp oil',
-    'mussels', 'pearls', 'smoked fish', 'fish oil', 'gold jewellery',
-    'saint statues', 'mussel necklaces', 'pearl necklaces', 'silver jewellery',
-    'coal', 'pitch', 'spices', 'salt', 'silk', 'incense', 'boats', 'iron',
-    'carts', 'casks', 'candied apples', 'gingerbread', 'flour', 'syrup',
-    'sweet bread', 'apples', 'berries', 'pears', 'cherries', 'nuts', 'grapes',
-    'roast goose', 'salt meat', 'dried meat', 'venison', 'benches',
-    'shelves', 'cabinets', 'chairs', 'tables', 'iron ore', 'gold', 'saltpetre',
-    'silver', 'eggs', 'geese', 'chicken', 'milk', 'horses', 'pigs', 'deer',
-    'wool', 'goats', 'arquebuses', 'halberds', 'leather doublet', 'suits of armour',
-    'shields', 'war horses', 'swords', 'eiderdowns', 'clothes',
-    'raiments', 'leather', 'nets', 'shoes', 'carpets', 'drapery',
+    array('water', 11), array('wood', 6), array('stones', 14),
+    array('tools', 8), array('bees wax', 1), array('bread', 1),
+    array('flax', 1), array('grain', 1), array('honey', 1), array('cheese', 1),
+    array('candles', 1), array('herbs', 1), array('beets', 1), array('beer', 2),
+    array('pear brandy', 2), array('mead', 2), array('cherry brandy', 2),
+    array('schnapps', 2), array('wine', 2), array('bibles', 3),
+    array('books', 3), array('pamphlets', 3), array('parchments', 3),
+    array('quills', 3), array('fish', 4), array('lamp oil', 4),
+    array('mussels', 4), array('pearls', 4), array('smoked fish', 4),
+    array('fish oil', 4), array('gold jewellery', 5), array('saint statues', 5),
+    array('mussel necklaces', 5), array('pearl necklaces', 5),
+    array('silver jewellery', 5), array('coal', 6), array('pitch', 6),
+    array('spices', 7), array('salt', 7), array('silk', 7), array('incense', 7),
+    array('boats', 8), array('iron', 8), array('carts', 8), array('casks', 8),
+    array('candied apples', 9), array('gingerbread', 9), array('flour', 9),
+    array('syrup', 9), array('sweet bread', 9), array('apples', 10),
+    array('berries', 10), array('pears', 10), array('cherries', 10),
+    array('nuts', 10), array('grapes', 10), array('roast goose', 12),
+    array('salt meat', 12), array('dried meat', 12), array('venison', 12),
+    array('benches', 13), array('shelves', 13), array('cabinets', 13),
+    array('chairs', 13), array('tables', 13), array('iron ore', 14),
+    array('gold', 14), array('saltpetre', 14), array('silver', 14),
+    array('eggs', 15), array('geese', 15), array('chicken', 15),
+    array('milk', 15), array('horses', 15), array('pigs', 15), array('deer', 15),
+    array('wool', 15), array('goats', 15), array('arquebuses', 16),
+    array('halberds', 16), array('leather doublet', 16),
+    array('suits of armour', 16), array('shields', 16), array('war horses', 16),
+    array('swords', 16), array('eiderdowns', 17), array('clothes', 17),
+    array('raiments', 17), array('leather', 17), array('nets', 17),
+    array('shoes', 17), array('carpets', 17), array('drapery', 17),
   );
   $table = 'kapi_manager_products';
   foreach ($products as $product) {
     $record = new stdClass();
-    $record->name = t($product);
+    $record->name = t($product[0]);
+    $record->workshop_id = $product[1];
     drupal_write_record($table, $record);
   }
 }
-
 
 /*
  * This function creates the default values for the products table

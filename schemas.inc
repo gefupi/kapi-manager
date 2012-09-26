@@ -12,6 +12,7 @@ function kapi_manager_getSchemas() {
   $schemas = array();
   $schemas['kapi_manager_products'] = _kapi_manager_getProductsSchema();
   $schemas['kapi_manager_dependencies'] = _kapi_manager_getDependenciesSchema();
+  $schemas['kapi_manager_workshops'] = _kapi_manager_getWorkshopSchema();
   return $schemas;
 }
 
@@ -37,6 +38,12 @@ function _kapi_manager_getProductsSchema() {
         'not null'    => TRUE,
         'description' => t('The human readable name of the product'),
       ),
+      'workshop_id' => array(
+        'type'        => 'int',
+        'unsigend'    => TRUE,
+        'not null'    => TRUE,
+        'description' => t('The workshop ID where product is manufactured'),
+      ),
     ),
     'primary key' => array('id'),
     'unique key' => array(
@@ -45,10 +52,15 @@ function _kapi_manager_getProductsSchema() {
     'index' => array(
       'idx_name' => array('name'),
     ),
+    'foreign_keys' => array(
+      'table'   => 'kapi_manager_workshops',
+      'columns' => array(
+        'workshop_id' => 'id',
+      ),
+    )
   );
   return $schema;
 }
-
 
 /*
  * This function returns an array description for the dependencies schema.
@@ -84,7 +96,7 @@ function _kapi_manager_getDependenciesSchema() {
     'foreign_keys' => array(
       'table'   => 'kapi_manager_products',
       'columns' => array(
-        'product_id' => 'id',
+        'product_id'    => 'id',
         'dependency_id' => 'id',
       ),
     ),
@@ -95,5 +107,37 @@ function _kapi_manager_getDependenciesSchema() {
   return $schema;
 }
 
+/*
+ * This function returns an array description for the workshops schema.
+ *
+ * @return array
+ */
+function _kapi_manager_getWorkshopSchema() {
+  $schema = array(
+    'description' => t('Stores workshop ID\'s and names'),
+    'fields' => array(
+      'id' => array(
+        'type'        => 'serial',
+        'unsigend'    => TRUE,
+        'not null'    => TRUE,
+        'description' => t('The workshop ID to indicate products by numbers'),
+      ),
+      'name' => array(
+        'type'        => 'varchar',
+        'length'      => '35',
+        'not null'    => TRUE,
+        'description' => t('The human readable name of the workshop'),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique key' => array(
+      'name' => array('name'),
+    ),
+    'index' => array(
+      'idx_name' => array('name'),
+    ),
+  );
+  return $schema;
+}
 
 
