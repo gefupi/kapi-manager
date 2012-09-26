@@ -4,19 +4,18 @@
  *   A page module that provides database tables and a frontend for kapi-manager
  */
 
-
 /**
  * This function generates a page containing the product list.
  */
 function kapi_manager_list_products_page() {
-  drupal_set_title('Product');
+  drupal_set_title(t('Product'));
   module_load_include('inc', 'kapi_manager', 'database/product_handler');
   $result = _kapi_manager_get_products();
   $rows = array();
   foreach ($result as $product) {
     $rows[] = array(
-      array('data' => $product->id,),
-      array('data' => $product->name,),
+      array('data' => $product->id, ),
+      array('data' => $product->name, ),
     );
   }
   $header = array(
@@ -26,9 +25,8 @@ function kapi_manager_list_products_page() {
   return theme('table', array('header' => $header, 'rows' => $rows));
 }
 
-
 /**
- * This function implements hook_permission()
+ * Implements hook_permission().
  */
 function kapi_manager_permission() {
   return array(
@@ -43,7 +41,7 @@ function kapi_manager_permission() {
 }
 
 /*
- * This function implements hook_menu()
+ * Implements hook_menu().
  */
 function kapi_manager_menu() {
   module_load_include('inc', 'kapi_manager', 'admin/menu');
@@ -53,7 +51,7 @@ function kapi_manager_menu() {
   $admin_access = array('access kapi_manager content');
   $user_access = array('access kapi_manager content');
 
-  _kapi_manager_admin_menu($items, $admin_access);  
+  _kapi_manager_admin_menu($items, $admin_access);
 
   return $items;
 }
@@ -66,13 +64,8 @@ function kapi_manager_edit_products_page() {
   return t('TODO: implement edit product page');
 }
 
-
-
-
-
-
 /**
- * wrapper to call private form function in forms/admin_products.inc
+ * wrapper to call private form function in 'admin/forms/products.inc'.
  */
 function kapi_manager_add_product_form($node, &$form_state) {
   module_load_include('inc', 'kapi_manager', 'admin/forms/products');
@@ -80,7 +73,7 @@ function kapi_manager_add_product_form($node, &$form_state) {
 }
 
 /**
- * wrapper to call private form validate function in forms/admin_products.inc
+ * wrapper to call private form validate function in 'admin/forms/products.inc'.
  */
 function kapi_manager_add_product_form_validate($form, &$form_state) {
   module_load_include('inc', 'kapi_manager', 'admin/forms/products');
@@ -88,7 +81,7 @@ function kapi_manager_add_product_form_validate($form, &$form_state) {
 }
 
 /**
- * wrapper to call private form submit function in forms/admin_products.inc
+ * wrapper to call private form submit function in 'admin/forms/products.inc'.
  */
 function kapi_manager_add_product_form_submit($form, &$form_state) {
   module_load_include('inc', 'kapi_manager', 'admin/forms/products');

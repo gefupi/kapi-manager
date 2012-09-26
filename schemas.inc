@@ -1,7 +1,12 @@
 <?php
+/*
+ * @file
+ *   This file provides the database schemas for tables used by modul
+ *   kapi_manager.
+ */
 
 /*
- *
+ * TODO: documentation
  */
 function kapi_manager_getSchemas() {
   $schemas = array();
@@ -13,9 +18,11 @@ function kapi_manager_getSchemas() {
 
 /*
  * This function returns an array description for the products schema.
+ *
+ * @return array
  */
 function _kapi_manager_getProductsSchema() {
-  $productsSchema = array(
+  $schema = array(
     'description' => t('Stores product ID\'s and names'),
     'fields' => array(
       'id' => array(
@@ -39,15 +46,17 @@ function _kapi_manager_getProductsSchema() {
       'idx_name' => array('name'),
     ),
   );
-  return $productsSchema;
+  return $schema;
 }
 
 
 /*
  * This function returns an array description for the dependencies schema.
+ *
+ * @return array
  */
 function _kapi_manager_getDependenciesSchema() {
-  $dependenciesSchema = array(
+  $schema = array(
     'descritpion' => t('Stores dependecies of products'),
     'fields' => array(
       'product_id' => array(
@@ -83,7 +92,7 @@ function _kapi_manager_getDependenciesSchema() {
       'idx_product_id' => array('product_id'),
     )
   );
-  return $dependenciesSchema;
+  return $schema;
 }
 
 

@@ -1,7 +1,12 @@
 <?php
+/*
+ * @file
+ *   This file provides the menu items of the admin section in kapi_menu.
+ */
 
-
-
+/*
+ * TODO: Dokumentation
+ */
 function _kapi_manager_admin_menu(&$items, $admin_access) {
   $items['kapi_manager/admin'] = array(
     'title' => 'Administration',
@@ -14,6 +19,9 @@ function _kapi_manager_admin_menu(&$items, $admin_access) {
   _kapi_manager_admin_product_menu($items, $admin_access);
 }
 
+/*
+ * TODO: Dokumentation
+ */
 function _kapi_manager_admin_product_menu(&$items, $admin_access) {
   $items['kapi_manager/admin/products'] = array(
     'title' => 'Products',

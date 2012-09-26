@@ -1,8 +1,16 @@
 <?php
+/*
+ * @file
+ *   This file provides functions to initialize the tables of kapi_manager modul
+ *   with default values.
+ */
+
 
 /*
  * This function will be called during modul installation to
  * create the default database entries.
+ *
+ * @return boolean
  */
 function kapi_manager_init_db() {
   _kapi_manager_init_products();
@@ -13,24 +21,25 @@ function kapi_manager_init_db() {
 
 
 /*
- * This function does some database checks after initialization
+ * This function does some database checks after initialization.
+ *
+ * @return boolean
  */
 function _kapi_manager_check_init_db() {
-  // TODO
   $product_count = db_query('SELECT COUNT(name) FROM {kapi_manager_products}')->fetchField();
   $dependency_count = db_query('SELECT COUNT(product_id) FROM {kapi_manager_dependencies}')->fetchField();
   if (($product_count == 93) && ($dependency_count == 230)) {
     return TRUE;
-  } else {
+  }
+  else {
     return FALSE;
   }
 }
 
 /*
- * This function creates the default values for the products table
+ * This function creates the default values for the products table.
  */
 function _kapi_manager_init_products() {
-  // TODO: use english product names
   $products = array(
     'water', 'wood', 'stones', 'tools', 'bees wax', 'bread', 'flax',
     'grain', 'honey', 'cheese', 'candles', 'herbs', 'beets', 'beer',
