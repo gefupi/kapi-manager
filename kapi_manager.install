@@ -10,7 +10,7 @@
  * and it will be called automaticly during modul installation.
  */
 function kapi_manager_schema() {
-  module_load_include('php', 'kapi_manager', 'schemas');
+  module_load_include('inc', 'kapi_manager', 'schemas');
   return kapi_manager_getSchemas();
 }
 
@@ -19,7 +19,7 @@ function kapi_manager_schema() {
  * which will be fired after the database schemas have been created
  */
 function kapi_manager_install() {
-  module_load_include('php', 'kapi_manager', 'init_db');
+  module_load_include('inc', 'kapi_manager', 'init_db');
   if (kapi_manager_init_db()) {
     drupal_set_message($message = st('Kapi-Manager database initialized successfully.'), $type='status');
   }
