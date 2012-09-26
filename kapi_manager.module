@@ -50,19 +50,20 @@ function kapi_manager_list_workshops_page() {
   $rows = array();
   foreach ($result as $workshop) {
     $rows[] = array(
-      array('data' => $workshop->id, ),
       array('data' => $workshop->name, ),
+      array('data' => l('edit', "kapi_manager/admin/workshop/$workshop->id/edit"), ),
+      array('data' => l('delete', "kapi_manager/admin/workshop/$workshop->id/edit"), ),
     );
   }
   $header = array(
-    array('data' => 'id', 'align' => 'center'),
-    array('data' => 'name', 'align' => 'center'),
+		  array('data' => 'Name', 'align' => 'center', ),
+    array('data' => 'Operations', 'align' => 'center', 'colspan' => 2, ),
   );
   return theme('table', array('header' => $header, 'rows' => $rows));
 }
 
-function kapi_manager_edit_workshops_page($workshop_id) {
-  return t('TODO: implement edit workshop page');
+function kapi_manager_edit_workshop_page($workshop_id) {
+	return t("TODO: implement edit workshop page (workshop_id: '@workshop_id')", array('@workshop_id' => $workshop_id));
 }
 
 /**
@@ -93,9 +94,9 @@ function kapi_manager_edit_products_page() {
 /**
  * wrapper to call private form function in 'admin/forms/workshops.inc'.
  */
-function kapi_manager_add_workshop_form($node, &$form_state) {
+function kapi_manager_add_workshop_form($form, &$form_state) {
   module_load_include('inc', 'kapi_manager', 'admin/forms/workshops');
-  return _kapi_manager_add_workshop_form($node, $form_state);
+  return _kapi_manager_add_workshop_form($form, $form_state);
 }
 
 /**

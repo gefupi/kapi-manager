@@ -55,8 +55,9 @@ function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
   $items['kapi_manager/admin/workshop/%/edit'] = array(
     'title' => 'Edit workshop',
     'page callback' => 'kapi_manager_edit_workshop_page',
-    'page arguments' => array(1),
+    'page arguments' => array(3),
     'access arguments' => $admin_access,
+    /* 'type' => MENU_LOCAL_ACTION, */
     'type' => MENU_CALLBACK,
     'menu_name' => 'kapi_manager',
   );
@@ -70,6 +71,8 @@ function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
     'menu_name' => 'kapi_manager',
     'weight' => 1,
   );
+
+  // @todo: add delete page
 }
 
 /*
