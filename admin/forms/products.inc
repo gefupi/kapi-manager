@@ -7,7 +7,7 @@
 /*
  * TODO: Dokumentation
  */
-function _kapi_manager_add_product_form($node, &$form_state) {
+function _kapi_manager_add_product_form($form, &$form_state) {
   $form['product_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Product name:'),
