@@ -9,7 +9,7 @@ function kapi_manager_list_products_page() {
   foreach ($result as $product) {
     $rows[] = array(
       array('data' => $product->id,),
-      array('data' => t($product->name),),
+      array('data' => $product->name,),
     );
   }
   $header = array(
@@ -77,12 +77,14 @@ function kapi_manager_menu() {
     'menu_name' => 'kapi_manager',
   );
 
+/*
   $items['kapi_manager/admin/options'] = array(
     'title' => 'options',
     'access arguments' => $admin_access,
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'menu_name' => 'kapi_manager',
   );
+*/
 
   $items['kapi_manager/admin/products'] = array(
     'title' => 'Products',
