@@ -46,16 +46,14 @@ function kapi_manager_test_page() {
 function kapi_manager_list_workshops_page() {
   drupal_set_title(t('Workshop'));
   module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
-  $result = _kapi_manager_get_workshops();
+  $result = _kapi_manager_get_workshop_names();
   $rows = array();
   foreach ($result as $workshop) {
     $rows[] = array(
-      array('data' => $workshop->id, ),
       array('data' => $workshop->name, ),
     );
   }
   $header = array(
-    array('data' => 'id', 'align' => 'center'),
     array('data' => 'name', 'align' => 'center'),
   );
   return theme('table', array('header' => $header, 'rows' => $rows));

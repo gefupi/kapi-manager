@@ -6,11 +6,20 @@
 
 
 /**
- * This function is returns a ResultSet containing all workshops from db.
+ * This function returns a ResultSet containing 'id and 'name' of all workshops.
  */
 function _kapi_manager_get_workshops() {
   $query = db_select('kapi_manager_workshops', 'w')
     ->fields('w', array('id', 'name'));
+  return $query->execute();
+}
+
+/**
+ * This function returns a ResultSet containing 'name' of all workshops.
+ */
+function _kapi_manager_get_workshop_names() {
+  $query = db_select('kapi_manager_workshops', 'w')
+    ->fields('w', array('name'));
   return $query->execute();
 }
 
