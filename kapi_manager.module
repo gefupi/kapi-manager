@@ -87,8 +87,6 @@ function kapi_manager_menu() {
     'access arguments' => $admin_access,
     'type' => MENU_LOCAL_ACTION,
     'menu_name' => 'kapi_manager',
-    // file may fail on local actions, because it is specified for page calls
-    'file' => 'forms/admin_products.inc',
   );
 
   return $items;
@@ -103,46 +101,32 @@ function kapi_manager_edit_products_page() {
   return t('TODO: implement edit product page');
 }
 
+
+
+
+
+
+/**
+ * wrapper to call private form function in forms/admin_products.php
+ */
 function kapi_manager_add_product_form($node, &$form_state) {
   module_load_include('php', 'kapi_manager', 'forms/admin_products');
   return _kapi_manager_add_product_form($node, $form_state);
-  
-/*
-  $form['product_name'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Product name:'),
-    '#default_value' => '',
-    '#size' => 35,
-    '#maxlength' => 35,
-    '#description' => t('Please enter product name.'),
-    '#required' => true,
-  );
-
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
-  );
-
-  return $form;
-*/
 }
 
+/**
+ * wrapper to call private form validate function in forms/admin_products.php
+ */
 function kapi_manager_add_product_form_validate($form, &$form_state) {
-  $product_name = $form_state['values']['product_name'];
-  module_load_include('php', 'kapi_manager', 'database/product_handler');
-  if ($product_name === '') {
-    form_set_error('product_name', t('You must specify a name for the product'));
-  } elseif (_kapi_manager_exists_product($product_name)) {
-    form_set_error('product_name', t("The product '@product_name' already exists.", 
-    	array('@product_name' => $product_name)));
-  }
+  module_load_include('php', 'kapi_manager', 'forms/admin_products');
+  return _kapi_manager_add_product_form_validate($form, $form_state);
 }
 
+/**
+ * wrapper to call private form submit function in forms/admin_products.php
+ */
 function kapi_manager_add_product_form_submit($form, &$form_state) {
-  $product_name = $form_state['values']['product_name'];
-  module_load_include('php', 'kapi_manager', 'database/product_handler');
-  // TODO: implement this function
-  _kapi_manager_save_product($product_name);
-  drupal_set_message($message = t("Added product '@product_name' to database", array('@product_name' => $product_name)), $type = 'status');
+  module_load_include('php', 'kapi_manager', 'forms/admin_products');
+  return _kapi_manager_add_product_form_submit($form, $form_state);
 }
 
