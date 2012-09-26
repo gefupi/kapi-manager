@@ -31,7 +31,6 @@ function _kapi_manager_get_products() {
 
 
 function _kapi_manager_exists_product($product_name) {
-  // TODO: implement this function
   $query = db_select('kapi_manager_products', 'p')
     ->fields('p', array('name'))
     ->condition('name', $product_name, 'LIKE')
@@ -65,7 +64,7 @@ function kapi_manager_permission() {
  */
 function kapi_manager_menu() {
   $items = array();
-  // TODO: switch admin permission after development
+  // TODO: switch admin permission after development/testing
 //  $admin_access = array('access kapi_manager administrate');
   $admin_access = array('access kapi_manager content');
   $user_access = array('access kapi_manager content');
@@ -138,11 +137,11 @@ function kapi_manager_add_product_form($node, &$form_state) {
   $form['product_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Product name:'),
-    '#title' => 'Add a product',
+//    '#title' => 'Add a product',
     '#default_value' => '',
     '#size' => 35,
     '#maxlength' => 35,
-    '#description' => 'Please enter product name.',
+    '#description' => t('Please enter product name.'),
     '#required' => true,
   );
 
