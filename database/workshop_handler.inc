@@ -18,27 +18,32 @@ function _kapi_manager_get_workshops() {
  * This function returns true if a workshop with given name already exists in
  * database, else false will be returned.
  *
- * @param workshop_name
+ * @param name
  *   string containing the workshop name
  * @return boolean
  */
-function _kapi_manager_exists_workshop($workshop_name) {
+function _kapi_manager_exists_workshop($name) {
   $query = db_select('kapi_manager_workshops', 'w')
     ->fields('w', array('name'))
-    ->condition('name', $workshop_name, 'LIKE')
+    ->condition('name', $name, 'LIKE')
     ->execute()
     ->fetchField();
-  if ($query === $workshop_name) {
+  if ($query === $name) {
     return TRUE;
   }
   return FALSE;
 }
 
 /*
- * @todo Documentation
+ * This function updates the workshop entry in db.
+ *
+ * @param old_name
+ *   the old workshop name
+ * @para new_name
+ *   the new workshop name
  */
-function _kapi_manager_update_workshop($old_name, $new_name) {
-  $num_updated = db_update('kapi_manager_workshops') // Table name no longer needs {}
+function _kapi_manager_db_update_workshop($old_name, $new_name) {
+  $num_updated = db_update('kapi_manager_workshops')
     ->fields(array('name' => $new_name))
     ->condition('name', $old_name, '=')
     ->execute();
@@ -46,20 +51,28 @@ function _kapi_manager_update_workshop($old_name, $new_name) {
 }
 
 /*
- * @todo Documentation
+ * This function inserts a workshop with given name into db table.
+ *
+ * @para name
+ *   Name of the workshop
  */
-function _kapi_manager_save_workshop($workshop_name) {
-  // @todo implement this function
-
+function _kapi_manager_db_insert_workshop($name) {
+  db_insert('kapi_manager_workshops')
+    ->fields(array('name' => $name))
+    ->execute();
 }
 
 /*
- * @todo Documentation
+ * This function returns the name of the workshop with given ID.
+ *
+ * @para id
+ *   ID of the workshop
+ * @return string
  */
-function _kapi_manager_get_workshop_name($workshop_id) {
+function _kapi_manager_get_workshop_name($id) {
   return db_select('kapi_manager_workshops', 'w')
     ->fields('w', array('name'))
-    ->condition('id', $workshop_id, 'LIKE')
+    ->condition('id', $id, 'LIKE')
     ->execute()
     ->fetchField();
 }
