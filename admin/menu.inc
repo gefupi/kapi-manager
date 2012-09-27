@@ -71,7 +71,15 @@ function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
     'weight' => 1,
   );
 
-  // @todo: add delete page
+  $items['kapi_manager/admin/workshops/%/delete'] = array(
+    'title' => 'Delete workshop',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('kapi_manager_delete_workshop_confirm_form' , 3),
+    'access arguments' => $admin_access,
+    'type' => MENU_VISIBLE_IN_BREADCRUMB,
+    'menu_name' => 'kapi_manager',
+  );
+
 }
 
 /*
