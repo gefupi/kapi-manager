@@ -36,15 +36,15 @@ function kapi_manager_admin_menu(&$items, $admin_access) {
  *   an array of access arguments
  */
 function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
-  $items['kapi_manager/admin/workshop'] = array(
-    'title' => 'Workshop',
+  $items['kapi_manager/admin/workshops'] = array(
+    'title' => 'Workshops',
     'page callback' => 'kapi_manager_list_workshops_page',
     'access arguments' => $admin_access,
     'type' => MENU_NORMAL_ITEM,
     'menu_name' => 'kapi_manager',
     'weight' => 0,
   );
-  $items['kapi_manager/admin/workshop/list'] = array(
+  $items['kapi_manager/admin/workshops/list'] = array(
     'title' => 'List',
     'access arguments' => $admin_access,
     'type' => MENU_DEFAULT_LOCAL_TASK,
@@ -52,8 +52,7 @@ function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
     'wight' => 0,
   );
 
-  $items['kapi_manager/admin/workshop/%/edit'] = array(
-    'title' => 'Edit workshop',
+  $items['kapi_manager/admin/workshops/%/edit'] = array(
     'page callback' => 'drupal_get_form',
     'page arguments' => array('kapi_manager_add_workshop_form' , 3),
     'access arguments' => $admin_access,
@@ -61,8 +60,7 @@ function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
     'menu_name' => 'kapi_manager',
   );
 
-  $items['kapi_manager/admin/workshop/add'] = array(
-    'title' => 'Add a workshop',
+  $items['kapi_manager/admin/workshops/add'] = array(
     'page callback' => 'drupal_get_form',
     'page arguments' => array('kapi_manager_add_workshop_form', '0'),
     'access arguments' => $admin_access,
