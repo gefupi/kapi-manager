@@ -54,18 +54,17 @@ function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
 
   $items['kapi_manager/admin/workshop/%/edit'] = array(
     'title' => 'Edit workshop',
-    'page callback' => 'kapi_manager_edit_workshop_page',
-    'page arguments' => array(3),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('kapi_manager_add_workshop_form' , 3),
     'access arguments' => $admin_access,
-    /* 'type' => MENU_LOCAL_ACTION, */
-    'type' => MENU_CALLBACK,
+    'type' => MENU_VISIBLE_IN_BREADCRUMB,
     'menu_name' => 'kapi_manager',
   );
 
   $items['kapi_manager/admin/workshop/add'] = array(
     'title' => 'Add a workshop',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('kapi_manager_add_workshop_form'),
+    'page arguments' => array('kapi_manager_add_workshop_form', '0'),
     'access arguments' => $admin_access,
     'type' => MENU_LOCAL_ACTION,
     'menu_name' => 'kapi_manager',
