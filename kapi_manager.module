@@ -51,8 +51,8 @@ function kapi_manager_list_workshops_page() {
   foreach ($result as $workshop) {
     $rows[] = array(
       array('data' => $workshop->name, ),
-      array('data' => l('edit', "kapi_manager/admin/workshop/$workshop->id/edit"), ),
-      array('data' => l('delete', "kapi_manager/admin/workshop/$workshop->id/edit"), ),
+      array('data' => l('edit', "kapi_manager/admin/workshops/$workshop->id/edit"), ),
+      array('data' => l('delete', "kapi_manager/admin/workshops/$workshop->id/edit"), ),
     );
   }
   $header = array(
@@ -90,26 +90,26 @@ function kapi_manager_list_products_page() {
 /**
  * wrapper to call private form function in 'admin/forms/workshops.inc'.
  */
-function kapi_manager_add_workshop_form($form, &$form_state, $workshop_id) {
+function kapi_manager_edit_workshop_form($form, &$form_state, $workshop_id) {
   module_load_include('inc', 'kapi_manager', 'admin/forms/workshops');
   $workshop_id ? drupal_set_title(t('Edit workshop')) : drupal_set_title(t('Add workshop'));
-  return _kapi_manager_add_workshop_form($form, $form_state, $workshop_id);
+  return _kapi_manager_edit_workshop_form($form, $form_state, $workshop_id);
 }
 
 /**
  * wrapper to call private form validate function in 'admin/forms/workshops.inc'.
  */
-function kapi_manager_add_workshop_form_validate($form, &$form_state) {
+function kapi_manager_edit_workshop_form_validate($form, &$form_state) {
   module_load_include('inc', 'kapi_manager', 'admin/forms/workshops');
-  return _kapi_manager_add_workshop_form_validate($form, $form_state);
+  return _kapi_manager_edit_workshop_form_validate($form, $form_state);
 }
 
 /**
  * wrapper to call private form submit function in 'admin/forms/workshops.inc'.
  */
-function kapi_manager_add_workshop_form_submit($form, &$form_state) {
+function kapi_manager_edit_workshop_form_submit($form, &$form_state) {
   module_load_include('inc', 'kapi_manager', 'admin/forms/workshops');
-  return _kapi_manager_add_workshop_form_submit($form, $form_state);
+  return _kapi_manager_edit_workshop_form_submit($form, $form_state);
 }
 
 /**

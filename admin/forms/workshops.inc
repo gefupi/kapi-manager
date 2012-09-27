@@ -5,7 +5,7 @@
  */
 
 /**
- * This function implements the form for the 'add workshop form'.
+ * This function implements the form for the 'edit workshop form'.
  *
  * @param form
  *   an array of form arguments
@@ -15,7 +15,7 @@
  *   0 - to add new workshop
  *   number - to edit workshop with given id
  */
-function _kapi_manager_add_workshop_form($node, &$form_state, $workshop_id) {
+function _kapi_manager_edit_workshop_form($node, &$form_state, $workshop_id) {
   $form['workshop_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Workshop name:'),
@@ -37,21 +37,21 @@ function _kapi_manager_add_workshop_form($node, &$form_state, $workshop_id) {
     '#value' => t('Save'),
   );
   $form['cancel'] = array(
-    '#markup' => l(t('Cancel'), 'kapi_manager/admin/workshop'),
+    '#markup' => l(t('Cancel'), 'kapi_manager/admin/workshops'),
   );
 
   return $form;
 }
 
 /**
- * This function implements validation for the 'add workshop form'.
+ * This function implements validation for the 'edit workshop form'.
  *
  * @param form
  *   an array of form arguments
  * @param form_stat
  *   reference to the array containing the form state
  */
-function _kapi_manager_add_workshop_form_validate($form, &$form_state) {
+function _kapi_manager_edit_workshop_form_validate($form, &$form_state) {
   $workshop_name = $form_state['values']['workshop_name'];
   $old_name = $form['workshop_name']['#default_value'];
   $changed = !($old_name === $workshop_name);
@@ -67,19 +67,19 @@ function _kapi_manager_add_workshop_form_validate($form, &$form_state) {
 }
 
 /**
- * This function implements submit actions for the 'add workshop form'.
+ * This function implements submit actions for the 'edit workshop form'.
  *
  * @param form
  *   an array of form arguments
  * @param form_stat
  *   reference to the array containing the form state
  */
-function _kapi_manager_add_workshop_form_submit($form, &$form_state) {
+function _kapi_manager_edit_workshop_form_submit($form, &$form_state) {
   $new_name = $form_state['values']['workshop_name'];
   $old_name = $form['workshop_name']['#default_value'];
   module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
   if ($old_name === $new_name) {
-    drupal_goto('kapi_manager/admin/workshop');
+    drupal_goto('kapi_manager/admin/workshops');
   }
   elseif ($old_name) {
     if (_kapi_manager_db_update_workshop($old_name, $new_name)) {
@@ -98,6 +98,6 @@ function _kapi_manager_add_workshop_form_submit($form, &$form_state) {
     drupal_set_message($message = t("Added workshop '@workshop_name'",
       array('@workshop_name' => $new_name)), $type = 'status');
   }
-  drupal_goto('kapi_manager/admin/workshop');
+  drupal_goto('kapi_manager/admin/workshops');
 }
 
