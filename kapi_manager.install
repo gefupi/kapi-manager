@@ -41,6 +41,7 @@ function kapi_manager_install() {
     'description' => 'This is the menu of the kapi_manager modul.',
   );
   menu_save($menu);
+  drupal_set_message($message = st('You must set region of the kapi_manager menu befor it appears.'), $type='info');
 }
 
 /*
