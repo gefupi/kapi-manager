@@ -92,6 +92,7 @@ function kapi_manager_list_products_page() {
  */
 function kapi_manager_add_workshop_form($form, &$form_state, $workshop_id) {
   module_load_include('inc', 'kapi_manager', 'admin/forms/workshops');
+  $workshop_id ? drupal_set_title(t('Edit workshop')) : drupal_set_title(t('Add workshop'));
   return _kapi_manager_add_workshop_form($form, $form_state, $workshop_id);
 }
 
