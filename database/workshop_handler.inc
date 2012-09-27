@@ -8,7 +8,7 @@
 /**
  * This function is returns a ResultSet containing all workshops from db.
  */
-function _kapi_manager_get_workshops() {
+function _kapi_manager_db_get_workshops() {
   $query = db_select('kapi_manager_workshops', 'w')
     ->fields('w', array('id', 'name'));
   return $query->execute();
@@ -22,7 +22,7 @@ function _kapi_manager_get_workshops() {
  *   string containing the workshop name
  * @return boolean
  */
-function _kapi_manager_exists_workshop($name) {
+function _kapi_manager_db_exists_workshop($name) {
   $query = db_select('kapi_manager_workshops', 'w')
     ->fields('w', array('name'))
     ->condition('name', $name, 'LIKE')
@@ -34,7 +34,7 @@ function _kapi_manager_exists_workshop($name) {
   return FALSE;
 }
 
-/*
+/**
  * This function updates the workshop entry in db.
  *
  * @param old_name
@@ -50,7 +50,7 @@ function _kapi_manager_db_update_workshop($old_name, $new_name) {
   return ($num_updated == 1);
 }
 
-/*
+/**
  * This function inserts a workshop with given name into db table.
  *
  * @para name
@@ -62,18 +62,17 @@ function _kapi_manager_db_insert_workshop($name) {
     ->execute();
 }
 
-/*
+/**
  * This function returns the name of the workshop with given ID.
  *
  * @para id
  *   ID of the workshop
  * @return string
  */
-function _kapi_manager_get_workshop_name($id) {
+function _kapi_manager_db_get_workshop_name($id) {
   return db_select('kapi_manager_workshops', 'w')
     ->fields('w', array('name'))
     ->condition('id', $id, 'LIKE')
     ->execute()
     ->fetchField();
 }
-

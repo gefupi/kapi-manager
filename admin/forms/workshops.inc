@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * TODO: documentation
+ * This file provides the forms used in workshop context.
  */
 
-/*
+/**
  * This function implements the form for the 'add workshop form'.
  *
  * @param form
@@ -28,10 +28,10 @@ function _kapi_manager_add_workshop_form($node, &$form_state, $workshop_id) {
 
   if ($workshop_id) {
     module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
-    $name = _kapi_manager_get_workshop_name($workshop_id);
+    $name = _kapi_manager_db_get_workshop_name($workshop_id);
     $form['workshop_name']['#default_value'] = $name;
   }
-  
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
@@ -43,7 +43,7 @@ function _kapi_manager_add_workshop_form($node, &$form_state, $workshop_id) {
   return $form;
 }
 
-/*
+/**
  * This function implements validation for the 'add workshop form'.
  *
  * @param form
@@ -54,13 +54,9 @@ function _kapi_manager_add_workshop_form($node, &$form_state, $workshop_id) {
 function _kapi_manager_add_workshop_form_validate($form, &$form_state) {
   $workshop_name = $form_state['values']['workshop_name'];
   $old_name = $form['workshop_name']['#default_value'];
-  /* module_load_include('inc', 'kapi_manager', 'database/workshop_handler'); */
-  /* $changed = TRUE; */
-  /* if ($default) { */
-  /*   $changed = !(_kapi_manager_get_workshop_name($default) === $workshop_name); */
-  /* } */
   $changed = !($old_name === $workshop_name);
-  $duplicate = _kapi_manager_exists_workshop($workshop_name);
+  module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
+  $duplicate = _kapi_manager_db_exists_workshop($workshop_name);
   if ($workshop_name === '') {
     form_set_error('workshop_name', t('You must specify a name for the workshop'));
   }
@@ -70,7 +66,7 @@ function _kapi_manager_add_workshop_form_validate($form, &$form_state) {
   }
 }
 
-/*
+/**
  * This function implements submit actions for the 'add workshop form'.
  *
  * @param form
@@ -86,14 +82,20 @@ function _kapi_manager_add_workshop_form_submit($form, &$form_state) {
     drupal_goto('kapi_manager/admin/workshop');
   }
   elseif ($old_name) {
-    _kapi_manager_update_workshop($new_name);
-    drupal_set_message($message = t("Changed workshop name from '@old_name' to '@new_name'", 
-      array('@old_name' => $old_name, '@new_name' => $new_name, )), 
-      $type = 'status');
+    if (_kapi_manager_db_update_workshop($old_name, $new_name)) {
+      drupal_set_message($message = t("Changed workshop name from '@old_name' to '@new_name'",
+        array('@old_name' => $old_name, '@new_name' => $new_name, )),
+        $type = 'status');
+    }
+    else {
+      drupal_set_message($message = t("Failed to change workshop name from '@old_name' to '@new_name'",
+        array('@old_name' => $old_name, '@new_name' => $new_name, )),
+        $type = 'error');
+    }
   }
   else {
-    _kapi_manager_save_workshop($new_name);
-    drupal_set_message($message = t("Added workshop '@workshop_name'", 
+    _kapi_manager_db_insert_workshop($new_name);
+    drupal_set_message($message = t("Added workshop '@workshop_name'",
       array('@workshop_name' => $new_name)), $type = 'status');
   }
   drupal_goto('kapi_manager/admin/workshop');
