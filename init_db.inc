@@ -1,11 +1,11 @@
 <?php
-/*
+/**
  * @file
  *   This file provides functions to initialize the tables of kapi_manager modul
  *   with default values.
  */
 
-/*
+/**
  * This function will be called during modul installation to
  * create the default database entries.
  *
@@ -18,7 +18,7 @@ function kapi_manager_init_db() {
   return _kapi_manager_check_init_db();
 }
 
-/*
+/**
  * This function does some database checks after initialization.
  *
  * @return boolean
@@ -36,7 +36,7 @@ function _kapi_manager_check_init_db() {
   }
 }
 
-/*
+/**
  * This function creates the default values for the workshops table.
  */
 function _kapi_manager_init_workshops() {
@@ -47,15 +47,14 @@ function _kapi_manager_init_workshops() {
     'joinery', 'stone pit', 'cattle farm', 'armourer',
     'weaving mill',
   );
-  $table = 'kapi_manager_workshops';
   foreach ($workshops as $workshop) {
-    $record = new stdClass();
-    $record->name = t($workshop);
-    drupal_write_record($table, $record);
+    db_insert('kapi_manager_workshops')
+      ->fields(array('name' => $workshop))
+      ->execute();
   }	
 }
 
-/*
+/**
  * This function creates the default values for the products table.
  */
 function _kapi_manager_init_products() {
@@ -91,16 +90,17 @@ function _kapi_manager_init_products() {
     array('raiments', 17), array('leather', 17), array('nets', 17),
     array('shoes', 17), array('carpets', 17), array('drapery', 17),
   );
-  $table = 'kapi_manager_products';
   foreach ($products as $product) {
-    $record = new stdClass();
-    $record->name = t($product[0]);
-    $record->workshop_id = $product[1];
-    drupal_write_record($table, $record);
+    db_insert('kapi_manager_products')
+      ->fields(array(
+        'name'        => $product[0],
+        'workshop_id' => $product[1],
+      ))
+      ->execute();
   }
 }
 
-/*
+/**
  * This function creates the default values for the products table
  */
 function _kapi_manager_init_dependencies() {
@@ -164,12 +164,13 @@ function _kapi_manager_init_dependencies() {
     array(91, 2, 0.1),   array(91, 4, 0.1),   array(92, 77, 30.0), array(92, 4, 2.0),
     array(93, 77, 7.0),  array(93, 4, 0.1),
   );
-  $table = 'kapi_manager_dependencies';
   foreach ($dependencies as $dependency) {
-    $record = new stdClass();
-    $record->product_id = $dependency[0];
-    $record->dependency_id = $dependency[1];
-    $record->factor     = $dependency[2];
-    drupal_write_record($table, $record);
+    db_insert('kapi_manager_dependencies')
+      ->fields(array(
+        'product_id'    => $dependency[0],
+        'dependency_id' => $dependency[1],
+        'factor'        => $dependency[2],
+      ))
+      ->execute();
   }
 }
