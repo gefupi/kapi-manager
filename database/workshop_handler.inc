@@ -35,12 +35,14 @@ function _kapi_manager_db_exists_workshop($name) {
 }
 
 /**
- * This function updates the workshop entry in db.
+ * This function updates a workshop entry in db.
  *
  * @param old_name
  *   the old workshop name
  * @para new_name
  *   the new workshop name
+ * @return
+ *   true if update was successfull, else false is returned
  */
 function _kapi_manager_db_update_workshop($old_name, $new_name) {
   $num_updated = db_update('kapi_manager_workshops')
@@ -75,4 +77,19 @@ function _kapi_manager_db_get_workshop_name($id) {
     ->condition('id', $id, 'LIKE')
     ->execute()
     ->fetchField();
+}
+
+/**
+ * This function deletes a workshop entry in db.
+ *
+ * @param name
+ *   the workshop name
+ * @return
+ *   true if delete was successfull, else false is returned
+ */
+function _kapi_manager_db_delete_workshop($name) {
+  $num_deleted = db_delete('kapi_manager_workshops')
+    ->condition('name', $name, '=')
+    ->execute();
+  return ($num_deleted == 1);
 }
