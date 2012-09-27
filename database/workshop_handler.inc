@@ -37,9 +37,12 @@ function _kapi_manager_exists_workshop($workshop_name) {
 /*
  * @todo Documentation
  */
-function _kapi_manager_update_workshop($workshop_name) {
-  // @todo implement this function
-
+function _kapi_manager_update_workshop($old_name, $new_name) {
+  $num_updated = db_update('kapi_manager_workshops') // Table name no longer needs {}
+    ->fields(array('name' => $new_name))
+    ->condition('name', $old_name, '=')
+    ->execute();
+  return ($num_updated == 1);
 }
 
 /*
