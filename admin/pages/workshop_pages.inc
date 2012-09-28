@@ -3,7 +3,7 @@
  * @file
  * This file provides the pages used in workshop administration context.
  */
- 
+
 /**
  * This function implements the page listing all workshops.
  *
@@ -19,12 +19,12 @@ function kapi_manager_list_workshops_page() {
   foreach ($result as $workshop) {
     $rows[] = array(
       array('data' => $workshop->name, ),
-      array('data' => l('edit', "kapi_manager/admin/workshops/$workshop->id/edit"), ),
-      array('data' => l('delete', "kapi_manager/admin/workshops/$workshop->id/delete"), ),
+      array('data' => l(t('edit'), "kapi_manager/admin/workshops/$workshop->id/edit"), ),
+      array('data' => l(t('delete'), "kapi_manager/admin/workshops/$workshop->id/delete"), ),
     );
   }
   $header = array(
-		  array('data' => 'Name', 'align' => 'center', ),
+    array('data' => 'Name', 'align' => 'center', ),
     array('data' => 'Operations', 'align' => 'center', 'colspan' => 2, ),
   );
   return theme('table', array('header' => $header, 'rows' => $rows));

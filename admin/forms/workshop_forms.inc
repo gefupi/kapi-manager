@@ -77,7 +77,7 @@ function _kapi_manager_edit_workshop_form_validate($form, &$form_state) {
  * new entry will be inserted into database. If the default workshop name was
  * set and is changed the according database entry is updated. If the default
  * workshop name was set and is unchanged database will not be changed.
- * After each action an according drupal message is set and site 
+ * After each action an according drupal message is set and site
  * 'kapi_manager/admin/workshops' is called.
  *
  * @param form
@@ -128,7 +128,6 @@ function _kapi_manager_edit_workshop_form_submit($form, &$form_state) {
  *   An array containing the confirm form elements to be displayed in the delete
  *   workshop confirm form.
  */
- */
 function _kapi_manager_delete_workshop_confirm_form($form, &$form_state, $workshop_id) {
   module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
   $name = _kapi_manager_db_get_workshop_name($workshop_id);
@@ -137,7 +136,7 @@ function _kapi_manager_delete_workshop_confirm_form($form, &$form_state, $worksh
     '#value' => $name,
   );
 
-  return confirm_form($form, 
+  return confirm_form($form,
     t("Are you sure you want to delete workshop '@workshop_name'?", array('@workshop_name' => $name)),
     'kapi_manager/admin/workshops',
     t('This action cannot be undone.'),
@@ -145,7 +144,6 @@ function _kapi_manager_delete_workshop_confirm_form($form, &$form_state, $worksh
     t('Cancel')
   );
 }
-
 
 /**
  * This function implements the confirm form submit for delete workshop action.
@@ -161,8 +159,5 @@ function _kapi_manager_delete_workshop_confirm_form_submit($form, &$form_state) 
   _kapi_manager_db_delete_workshop($name);
   drupal_set_message($message = t("Deleted workshop '@workshop_name'",
     array('@workshop_name' => $name)), $type = 'status');
-  drupal_goto('kapi_manager/admin/workshops');  
+  drupal_goto('kapi_manager/admin/workshops');
 }
-
-
-

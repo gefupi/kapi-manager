@@ -40,10 +40,10 @@ function _kapi_manager_check_init_db() {
  * This function creates the default values for the workshops table.
  */
 function _kapi_manager_init_workshops() {
-  $workshops = array (
+  $workshops = array(
     'farm', 'brewery', 'printing press', 'fisching hut',
     'goldsmith', 'lumberjack', 'trade caravan', 'manufactory',
-    'mill bakery', 'fruit picker', 'well', 'butchery', 
+    'mill bakery', 'fruit picker', 'well', 'butchery',
     'joinery', 'stone pit', 'cattle farm', 'armourer',
     'weaving mill',
   );
@@ -51,7 +51,7 @@ function _kapi_manager_init_workshops() {
     db_insert('kapi_manager_workshops')
       ->fields(array('name' => $workshop))
       ->execute();
-  }	
+  }
 }
 
 /**
