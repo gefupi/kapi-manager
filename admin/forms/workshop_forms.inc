@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * This file provides the forms used in workshop context.
+ * This file provides the forms used in workshop administration context.
  */
 
 /**
