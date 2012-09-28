@@ -85,25 +85,25 @@ function kapi_manager_delete_workshop_confirm_form_submit($form, &$form_state) {
 
 
 /**
- * wrapper to call private form function in 'admin/forms/products.inc'.
+ * wrapper to call private form function in 'admin/forms/product_forms.inc'.
  */
-function kapi_manager_add_product_form($node, &$form_state) {
-  module_load_include('inc', 'kapi_manager', 'admin/forms/products');
-  return _kapi_manager_add_product_form($node, $form_state);
+function kapi_manager_edit_product_form($node, &$form_state, $product_id) {
+  module_load_include('inc', 'kapi_manager', 'admin/forms/product_forms');
+  return _kapi_manager_add_product_form($node, $form_state, $product_id);
 }
 
 /**
- * wrapper to call private form validate function in 'admin/forms/products.inc'.
+ * wrapper to call private form validate function in 'admin/forms/product_forms.inc'.
  */
-function kapi_manager_add_product_form_validate($form, &$form_state) {
-  module_load_include('inc', 'kapi_manager', 'admin/forms/products');
+function kapi_manager_edit_product_form_validate($form, &$form_state) {
+  module_load_include('inc', 'kapi_manager', 'admin/forms/product_forms');
   return _kapi_manager_add_product_form_validate($form, $form_state);
 }
 
 /**
- * wrapper to call private form submit function in 'admin/forms/products.inc'.
+ * wrapper to call private form submit function in 'admin/forms/product_forms.inc'.
  */
-function kapi_manager_add_product_form_submit($form, &$form_state) {
-  module_load_include('inc', 'kapi_manager', 'admin/forms/products');
+function kapi_manager_edit_product_form_submit($form, &$form_state) {
+  module_load_include('inc', 'kapi_manager', 'admin/forms/product_forms');
   return _kapi_manager_add_product_form_submit($form, $form_state);
 }
