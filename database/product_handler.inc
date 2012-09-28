@@ -15,6 +15,21 @@ function _kapi_manager_db_get_products() {
 }
 
 /**
+ * This function returns the name of the product with given ID.
+ *
+ * @para id
+ *   ID of the product
+ * @return string
+ */
+function _kapi_manager_db_get_product_name($id) {
+  return db_select('kapi_manager_products', 'p')
+    ->fields('p', array('name'))
+    ->condition('id', $id, 'LIKE')
+    ->execute()
+    ->fetchField();
+}
+
+/**
  * This function returns true if a product with given name already exists in
  * database, else false will be returned.
  *
