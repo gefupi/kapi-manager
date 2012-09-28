@@ -7,10 +7,28 @@
 
 /**
  * This function is returns a ResultSet containing all products from db.
+ *
+ * @return
+ *   An array containing the result set
  */
 function _kapi_manager_db_get_products() {
   $query = db_select('kapi_manager_products', 'p')
     ->fields('p', array('id', 'name', 'workshop_id'));
+  return $query->execute();
+}
+
+/**
+ * This function is returns a ResultSet containing all products in human
+ * readable form from db.
+ *
+ * @return
+ *   An array containing the result set
+ */
+function _kapi_manager_db_get_h_products() {
+  $query = db_select('kapi_manager_products', 'p');	
+  $query->join('kapi_manager_workshops', 'w', 'p.workshop_id = w.id');
+  $query->fields('p', array('id', 'name'))
+    ->fields('w', array('name'));
   return $query->execute();
 }
 

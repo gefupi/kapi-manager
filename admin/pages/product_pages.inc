@@ -14,12 +14,12 @@
 function kapi_manager_list_products_page() {
   drupal_set_title(t('Product'));
   module_load_include('inc', 'kapi_manager', 'database/product_handler');
-  $result = _kapi_manager_db_get_products();
+  $result = _kapi_manager_db_get_h_products();
   $rows = array();
   foreach ($result as $product) {
     $rows[] = array(
       array('data' => $product->name, ),
-      array('data' => $product->workshop_id, ),
+      array('data' => $product->w_name, ),
       array('data' => l(t('edit'), "kapi_manager/admin/products/$product->id/edit"), ),
       array('data' => l(t('delete'), "kapi_manager/admin/products/$product->id/delete"), ),
     );
