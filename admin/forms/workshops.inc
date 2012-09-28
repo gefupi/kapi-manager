@@ -12,8 +12,12 @@
  * @param form_stat
  *   reference to the array of form state
  * @param workshop_id
- *   0 - to add new workshop
- *   number - to edit workshop with given id
+ *   0 - to add new workshop or
+ *   positiv number - to edit workshop with given id
+ *
+ * @return
+ *   An array containing the form elements to be displayed in the workshop
+ *   editing form.
  */
 function _kapi_manager_edit_workshop_form($node, &$form_state, $workshop_id) {
   $form['workshop_name'] = array(
@@ -119,6 +123,11 @@ function _kapi_manager_edit_workshop_form_submit($form, &$form_state) {
  * @param workshop_id
  *   0 - to add new workshop
  *   number - to edit workshop with given id
+ *
+ * @return
+ *   An array containing the confirm form elements to be displayed in the delete
+ *   workshop confirm form.
+ */
  */
 function _kapi_manager_delete_workshop_confirm_form($form, &$form_state, $workshop_id) {
   module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
