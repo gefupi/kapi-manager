@@ -37,12 +37,13 @@ function kapi_manager_admin_menu(&$items, $admin_access) {
  */
 function _kapi_manager_admin_workshop_menu(&$items, $admin_access) {
   $items['kapi_manager/admin/workshops'] = array(
-    'title' => 'Workshops',
-    'page callback' => 'kapi_manager_list_workshops_page',
+    'title'            => 'Workshops',
+    'page callback'    => 'kapi_manager_list_workshops_page',
     'access arguments' => $admin_access,
-    'type' => MENU_NORMAL_ITEM,
-    'menu_name' => 'kapi_manager',
-    'weight' => 0,
+    'type'             => MENU_NORMAL_ITEM,
+    'menu_name'        => 'kapi_manager',
+    'weight'           => 0,
+    'file'             => 'admin/pages/workshop_pages.inc',
   );
   $items['kapi_manager/admin/workshops/list'] = array(
     'title' => 'List',
@@ -99,6 +100,7 @@ function _kapi_manager_admin_product_menu(&$items, $admin_access) {
     'type' => MENU_NORMAL_ITEM,
     'menu_name' => 'kapi_manager',
     'weight' => 1,
+    'file'             => 'admin/pages/product_pages.inc',
   );
   $items['kapi_manager/admin/products/list'] = array(
     'title' => 'List',
