@@ -120,7 +120,7 @@ function _kapi_manager_admin_product_menu(&$items, $admin_access) {
   $items['kapi_manager/admin/products/%/edit'] = array(
     'title'            => 'Edit product',
     'page callback'    => 'drupal_get_form',
-    'page arguments'   => array('kapi_manager_edit_products_form', 3),
+    'page arguments'   => array('kapi_manager_edit_product_form', 3),
     'access arguments' => $admin_access,
     'type'             => MENU_VISIBLE_IN_BREADCRUMB,
     'menu_name'        => 'kapi_manager',
