@@ -8,9 +8,9 @@
 /**
  * This function is returns a ResultSet containing all products from db.
  */
-function _kapi_manager_get_products() {
+function _kapi_manager_db_get_products() {
   $query = db_select('kapi_manager_products', 'p')
-    ->fields('p', array('id', 'name'));
+    ->fields('p', array('id', 'name', 'workshop_id'));
   return $query->execute();
 }
 
@@ -22,7 +22,7 @@ function _kapi_manager_get_products() {
  *   string containing the product name
  * @return boolean
  */
-function _kapi_manager_exists_product($product_name) {
+function _kapi_manager_db_exists_product($product_name) {
   $query = db_select('kapi_manager_products', 'p')
     ->fields('p', array('name'))
     ->condition('name', $product_name, 'LIKE')
@@ -37,7 +37,15 @@ function _kapi_manager_exists_product($product_name) {
 /*
  * TODO: Documentation
  */
-function _kapi_manager_save_product($product_name) {
+function _kapi_manager_db_insert_product($product_name) {
+  // TODO: implement this function
+
+}
+
+/*
+ * TODO: Documentation
+ */
+function _kapi_manager_db_update_product($product_name) {
   // TODO: implement this function
 
 }
