@@ -31,13 +31,50 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
   );
 
   // @todo add workshop selection
+  module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
+  $workshop_header = array('workshop' => t('Workshop'));
+  $workshop_options = array();
+  $workshops = _kapi_manager_db_get_workshops();
+  foreach($workshops  as $workshop) {
+    $workshop_options[$workshop->id] = array(
+      'workshop' => t($workshop->name),
+    );	  
+  }
+  $form['workshop'] = array(
+    '#type'        => 'tableselect',
+    '#title'       => t('Workshop'),
+    '#description' => t('Select the Workshop'),
+    '#header'      => $workshop_header,
+    '#options'     => $workshop_options,
+    '#multiple'    => FALSE,
+    '#js_select'   => FALSE,
+    '#empty' => t('no workshops found'),
+  );
+  
 
+  // set actual values if product is edited
   if ($product_id) {
     module_load_include('inc', 'kapi_manager', 'database/product_handler');
-    $name = _kapi_manager_db_get_product_name($product_id);
-    $form['product_name']['#default_value'] = $name;
+    $product = _kapi_manager_db_get_products($product_id)->fetchObject();
+    $form['product_name']['#default_value'] = $product->name;
+    $form['workshop']['#default_value'] = $product->workshop_id;
   }
 
+  /*
+  $header = array(
+    'product' = t('Product'),
+    // @todo add factor header
+  );
+  $options = array();
+
+  $form['dependencies'] = array(
+    '#type'        => 'tableselect',
+    '#title'       => t('Dependencies'),
+    '#description' => t('Select the dependencies and set their factors'),
+    '#header'      => $header,
+    '#options'     => $options,
+  );
+  */
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
@@ -88,6 +125,7 @@ function _kapi_manager_edit_product_form_validate($form, &$form_state) {
  *   reference to the array containing the form state
  */
 function _kapi_manager_edit_product_form_submit($form, &$form_state) {
+// @todo: check wich workshop is chosen and whether it is changed
   $new_name = $form_state['values']['product_name'];
   $old_name = $form['product_name']['#default_value'];
   module_load_include('inc', 'kapi_manager', 'database/product_handler');
