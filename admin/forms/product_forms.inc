@@ -142,8 +142,12 @@ function _kapi_manager_edit_product_form_submit($form, &$form_state) {
 // @todo: check wich workshop is chosen and whether it is changed
   $new_name = $form_state['values']['product_name'];
   $old_name = $form['product_name']['#default_value'];
+  $new_workshop = $form_state['values']['workshop'];
+  $old_workshop = $form['workshop']['#default_value'];
   module_load_include('inc', 'kapi_manager', 'database/product_handler');
-  if ($old_name === $new_name) {
+  $changed_name = !($old_name === $new_name);
+  $changed_workshop = !($old_workshop === $new_workshop);
+  if (!$changed_name) {
     drupal_goto('kapi_manager/admin/products');
   }
   elseif ($old_name) {
