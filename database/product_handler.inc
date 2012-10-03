@@ -6,20 +6,31 @@
 
 
 /**
- * This function is returns a ResultSet containing all products from db.
+ * This function is returns a ResultSet containing product(s) from db.
+ *
+ * The returned result set contains all fileds of the product table (id, name
+ * and workshop_id). If an (optional) parameter is given, the result set will
+ * only contain the product with given product_id.
+ *
+ * @para product_id
+ *   (optional) product_id to constrain
  *
  * @return
  *   An array containing the result set
  */
-function _kapi_manager_db_get_products() {
+function _kapi_manager_db_get_products($product_id = FALSE) {
   $query = db_select('kapi_manager_products', 'p')
     ->fields('p', array('id', 'name', 'workshop_id'));
-  return $query->execute();
+  if ($product_id) {
+    $query->condition('id', $product_id, '=');
+  }
+  $result = $query->execute();
+  return $result;
 }
 
 /**
- * This function is returns a ResultSet containing all products in human
- * readable form from db.
+ * This function is returns a ResultSet containing all products and their
+ * according workshops in human readable form from db.
  *
  * @return
  *   An array containing the result set
