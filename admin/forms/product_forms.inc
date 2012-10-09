@@ -61,7 +61,37 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
  *   an array of form arguments
  */
 function _kapi_manager_add_dependency_selections_to_form(&$form) {
+  module_load_include('inc', 'kapi_manager', 'database/product_handler');
+  $product_options = array(t('--- None ---'));
+  $products = _kapi_manager_db_get_h_products();
+   foreach($products as $product) {
+    $product_options[] = $product->name;
+  }
 
+  $counter = 1;
+  $form['dependencies'] = array(
+    '#types' => 'vertical_tabs',
+  );
+  while ($counter <6) {
+    $form['dependency_' . $counter] = array(
+      '#type' => 'fieldset',
+      '#title' => 'Dependency ' . $counter,
+      '#collapsible' => TRUE,
+      '#group' => 'dependencies',
+    );
+
+    $form['dependency_' . $counter]['name'] = array(
+      '#title'         => t('Product'),
+      '#type'          => 'select',
+      '#default_value' => 0,
+      '#description'   => t('Select a product as dependency'),
+      '#options'       => $product_options,
+    );
+
+
+    $counter +=1;
+  }
+	
 }
 
 /**
@@ -72,10 +102,11 @@ function _kapi_manager_add_dependency_selections_to_form(&$form) {
  */
 function _kapi_manager_add_workshop_selection_to_form(&$form) {
   module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
+  // FIXME - 20121009 - $workshop_header seems to be unused. -> delete?
   $workshop_header = array('workshop' => t('Workshop'), );
   $workshop_options = array(t('--- SELECT ---'));
   $workshops = _kapi_manager_db_get_workshops();
-   foreach($workshops  as $workshop) {
+   foreach($workshops as $workshop) {
     $workshop_options[] = $workshop->name;
   }
 
