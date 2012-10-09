@@ -5,7 +5,28 @@
  */
 
 /**
- * This function is returns a ResultSet containing the dependencies for a given product from db.
+ * This function is returns a ResultSet containing the dependencies for a given
+ * product from db.
+ *
+ * @param $product_id
+ *   The product_id value
+ *
+ * @return
+ *   An array containing the result set
+ */
+function _kapi_manager_db_get_dependencies($product_id) {
+  $query = db_select('kapi_manager_dependencies', 'd');
+  $query->fields('d', array('dependency_id', 'factor'))
+    ->condition('d.product_id', $product_id, '=');
+  return $query->execute();
+}
+
+/**
+ * This function is returns a ResultSet containing the human readable 
+ * dependencies for a given product from db.
+ *
+ * @param $product_id
+ *   The product_id value
  *
  * @return
  *   An array containing the result set
