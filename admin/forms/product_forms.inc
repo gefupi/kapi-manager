@@ -74,10 +74,10 @@ function _kapi_manager_add_dependency_selections_to_form(&$form) {
   );
   while ($counter <6) {
     $form['dependency_' . $counter] = array(
-      '#type' => 'fieldset',
-      '#title' => 'Dependency ' . $counter,
+      '#type'        => 'fieldset',
+      '#title'       => 'Dependency ' . $counter,
       '#collapsible' => TRUE,
-      '#group' => 'dependencies',
+      '#group'       => 'dependencies',
     );
 
     $form['dependency_' . $counter]['name'] = array(
@@ -88,6 +88,14 @@ function _kapi_manager_add_dependency_selections_to_form(&$form) {
       '#options'       => $product_options,
     );
 
+    $form['dependency_' . $counter]['factor'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Factor:'),
+      '#default_value' => '',
+      '#size' => 5,
+      '#maxlength' => 5,
+      '#description' => t('Please enter factor for dependency product.'),
+    );
 
     $counter +=1;
   }
