@@ -55,7 +55,7 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
 
 
 /**
- * This add 5 dependency selections to the given form.
+ * This function adds 5 dependency selections to the given form.
  *
  * @param form
  *   an array of form arguments
@@ -103,15 +103,13 @@ function _kapi_manager_add_dependency_selections_to_form(&$form) {
 }
 
 /**
- * This add a workshop selection to the given form.
+ * This function adds a workshop selection to the given form.
  *
  * @param form
  *   an array of form arguments
  */
 function _kapi_manager_add_workshop_selection_to_form(&$form) {
   module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
-  // FIXME - 20121009 - $workshop_header seems to be unused. -> delete?
-  $workshop_header = array('workshop' => t('Workshop'), );
   $workshop_options = array(t('--- SELECT ---'));
   $workshops = _kapi_manager_db_get_workshops();
    foreach($workshops as $workshop) {
