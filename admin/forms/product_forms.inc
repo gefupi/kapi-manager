@@ -30,8 +30,9 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
     '#required' => TRUE,
   );
 
-  // add workshop selection
+  // add workshop selection and dependency input
   _kapi_manager_add_workshop_selection_to_form($form);
+  _kapi_manager_add_dependency_selections_to_form($form);
 
   // set actual values if product is edited
   if ($product_id) {
@@ -40,22 +41,6 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
     $form['product_name']['#default_value'] = $product->name;
     $form['workshop']['#default_value'] = $product->workshop_id;
   }
-
-  /*
-  $header = array(
-    'product' = t('Product'),
-    // @todo add factor header
-  );
-  $options = array();
-
-  $form['dependencies'] = array(
-    '#type'        => 'tableselect',
-    '#title'       => t('Dependencies'),
-    '#description' => t('Select the dependencies and set their factors'),
-    '#header'      => $header,
-    '#options'     => $options,
-  );
-  */
 
   $form['submit'] = array(
     '#type' => 'submit',
@@ -70,7 +55,17 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
 
 
 /**
- * This add a workshop selection table to the given form.
+ * This add 5 dependency selections to the given form.
+ *
+ * @param form
+ *   an array of form arguments
+ */
+function _kapi_manager_add_dependency_selections_to_form(&$form) {
+
+}
+
+/**
+ * This add a workshop selection to the given form.
  *
  * @param form
  *   an array of form arguments
