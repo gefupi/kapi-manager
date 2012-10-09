@@ -37,9 +37,17 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
   // set actual values if product is edited
   if ($product_id) {
     module_load_include('inc', 'kapi_manager', 'database/product_handler');
+    module_load_include('inc', 'kapi_manager', 'database/dependency_handler');
     $product = _kapi_manager_db_get_products($product_id)->fetchObject();
     $form['product_name']['#default_value'] = $product->name;
     $form['workshop']['#default_value'] = $product->workshop_id;
+    $dependencies = _kapi_manager_db_get_dependencies($product_id);
+    $counter = 1;
+    foreach ($dependencies as $dependency) {
+      $form['dependency_' . $counter]['name']['#default_value'] = $dependency->dependency_id;
+      $form['dependency_' . $counter]['factor']['#default_value'] = $dependency->factor;
+      $counter += 1;
+    }
   }
 
   $form['submit'] = array(
@@ -94,7 +102,7 @@ function _kapi_manager_add_dependency_selections_to_form(&$form) {
       '#default_value' => '',
       '#size' => 5,
       '#maxlength' => 5,
-      '#description' => t('Please enter factor for dependency product.'),
+      '#description' => t('Please enter factor of dependency product.'),
     );
 
     $counter +=1;
