@@ -44,8 +44,8 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
     $dependencies = _kapi_manager_db_get_dependencies($product_id);
     $counter = 1;
     foreach ($dependencies as $dependency) {
-      $form['dependency_' . $counter]['name']['#default_value'] = $dependency->dependency_id;
-      $form['dependency_' . $counter]['factor']['#default_value'] = $dependency->factor;
+      $form['dependency_group_' . $counter]['dependency_' . $counter]['#default_value'] = $dependency->dependency_id;
+      $form['dependency_group_' . $counter]['factor_' . $counter]['#default_value'] = $dependency->factor;
       $counter += 1;
     }
   }
@@ -81,14 +81,14 @@ function _kapi_manager_add_dependency_selections_to_form(&$form) {
     '#types' => 'vertical_tabs',
   );
   while ($counter <6) {
-    $form['dependency_' . $counter] = array(
+    $form['dependency_group_' . $counter] = array(
       '#type'        => 'fieldset',
       '#title'       => 'Dependency ' . $counter,
       '#collapsible' => TRUE,
       '#group'       => 'dependencies',
     );
 
-    $form['dependency_' . $counter]['name'] = array(
+    $form['dependency_group_'. $counter]['dependency_' . $counter] = array(
       '#title'         => t('Product'),
       '#type'          => 'select',
       '#default_value' => 0,
@@ -96,7 +96,7 @@ function _kapi_manager_add_dependency_selections_to_form(&$form) {
       '#options'       => $product_options,
     );
 
-    $form['dependency_' . $counter]['factor'] = array(
+    $form['dependency_group_' . $counter]['factor_' . $counter] = array(
       '#type' => 'textfield',
       '#title' => t('Factor:'),
       '#default_value' => '',
@@ -156,7 +156,45 @@ function _kapi_manager_edit_product_form_validate($form, &$form_state) {
     form_set_error('product_name', t("The product '@product_name' already exists.",
       array('@product_name' => $product_name)));
   }
+  $dependencies = _kapi_manager_product_forms_get_depedencies_from_edit_form($form_state);
+  
+  print_r($form_state['values']);
+  
+  $dep1_n = $form_state['values']['dependency_1'];
+  $dep1_f = $form_state['values']['factor_1'];
+  form_set_error('dependency_group_1', t("[DEBUG]: Dependency 1 has name @dep_n and factor @dep_f", 
+    array('@dep_n' => $dep1_n, '@dep_f' => $dep1_f)));
 }
+
+/**
+ * @todo: documentation
+ */
+function _kapi_manager_product_forms_get_depedencies_from_edit_form($form_state) {
+  $result = array();
+  for($i=1; $i < 6; $i++) {
+    $dependency = $form_state['values']['dependency_' . $i];
+    $factor = $form_state['values']['factor_' . $i];
+    if ($dependency != 0) {
+      if ($factor === ''){
+        form_set_error('factor_' . $i, 
+          t("Factor for dependency @i must be given if a product is choosen.", 
+          array('@i' => $i))
+        );
+      } else if (! is_numeric($factor) {
+        form_set_error('factor_' . $i, 
+          t("Factor for dependency @i must be numeric.",
+          array('@i' => $i))
+      } else if ($factor <= 0) {
+        form_set_error('factor_' . $i, 
+          t("Factor for dependency @i must be greater than zero.",
+          array('@i' => $i))
+      }
+    result[$i] = array('dependency_id' => $dependency, 'factor' => $factor);
+  }
+  /* @todo: check wether a product is coosen twice as dependency */
+  return $result;
+}
+
 
 /**
  * This function implements submit actions for the 'edit product form'.
