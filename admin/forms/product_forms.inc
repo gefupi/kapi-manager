@@ -69,7 +69,6 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
 }
 
 
-
 /**
  * This add a workshop selection table to the given form.
  *
@@ -79,23 +78,19 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
 function _kapi_manager_add_workshop_selection_to_form(&$form) {
   module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
   $workshop_header = array('workshop' => t('Workshop'), );
-  $workshop_options = array();
+  $workshop_options = array(t('--- SELECT ---'));
   $workshops = _kapi_manager_db_get_workshops();
-  foreach($workshops  as $workshop) {
-    $workshop_options[$workshop->id] = array(
-      'workshop' => t($workshop->name),
-    );
+   foreach($workshops  as $workshop) {
+    $workshop_options[] = $workshop->name;
   }
 
   $form['workshop'] = array(
-    '#type'        => 'tableselect',
-    '#title'       => t('Workshop'),
-    '#description' => t('Select the Workshop'),
-    '#header'      => $workshop_header,
-    '#options'     => $workshop_options,
-    '#multiple'    => FALSE,
-    '#js_select'   => FALSE,
-    '#empty' => t('no workshops found'),
+    '#title'         => t('Workshop'),
+    '#type'          => 'select',
+    '#default_value' => 0,
+    '#description'   => t('Select the workshop'),
+    '#options'       => $workshop_options,
+    '#required'      => TRUE,
   );
 }
 
