@@ -53,7 +53,7 @@ function _kapi_manager_db_get_h_products() {
 function _kapi_manager_db_get_product_id($name) {
   return db_select('kapi_manager_products', 'p')
     ->fields('p', array('id'))
-    ->condition('name', $id, 'LIKE')
+    ->condition('name', $name, 'LIKE')
     ->execute()
     ->fetchField();
 }
