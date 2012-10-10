@@ -221,7 +221,8 @@ function _kapi_manager_edit_product_form_validate_dependencies($form, $form_stat
 /**
  * This function implements submit actions for the 'edit product form'.
  *
- * If no default product name was not set in form, it is a new product and a
+ * @todo: update this documentation
+ * If no default product name was set in form, it is a new product and a
  * new entry will be inserted into database. If the default product name was
  * set and is changed the according database entry is updated. If the default
  * product name was set and is unchanged database will not be changed.
@@ -235,6 +236,39 @@ function _kapi_manager_edit_product_form_validate_dependencies($form, $form_stat
  */
 function _kapi_manager_edit_product_form_submit($form, &$form_state) {
 // @todo: check wich workshop is chosen and whether it is changed
+  module_load_include('inc', 'kapi_manager', 'database/product_handler');
+  module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
+
+  $name = array(
+    'old' => $form['product_name']['#default_value'],
+    'new' => $form_state['values']['product_name'],
+  );
+  $name['changed'] = !($name['old'] === $name['new']);
+
+  $workshop = array(
+    'old_index' = $form['workshop']['#default_value'],
+    'new_index' = $form_state['values']['workshop'],
+  );
+  $workshop['changed'] = !($workshop['old_index'] === $workshop['new_index']);
+  $workshop['name'] = $form['workshop']['#options'][$workshop['new_index']];
+  $worhshop['id'] = _kapi_manager_get_workshop_id($workshop['name']);
+
+  $dependencies = array();
+  for($i = 1; $i < 6; $i++){
+    $dependency_index = $form_state['values']['dependency_' . $i];
+    if (! ($dependency_index === '0')) {
+      $dependency_name = $form['dependency_group_' . $i]['dependency_' . $i]['#options'][$dependency_index];
+      $factor = $form_state['values']['factor_' . $i];
+      $dependency_id = _kapi_manager_db_get_product_id($dependency_name);
+      $dependencies[] = array(
+        'dependency_id' => $dependency_id,
+        'factor'        => $factor
+      );
+    }
+  }
+
+
+
   $new_name = $form_state['values']['product_name'];
   $old_name = $form['product_name']['#default_value'];
   $new_workshop_index = $form_state['values']['workshop'];
@@ -242,7 +276,6 @@ function _kapi_manager_edit_product_form_submit($form, &$form_state) {
   $workshop = $form['workshop']['#options'][$new_workshop_index];
   module_load_include('inc', 'kapi_manager', 'database/product_handler');
   $changed_name = !($old_name === $new_name);
-  $changed_workshop = !($old_workshop_index === $new_workshop_index);
   if (!$changed_name) {
     drupal_goto('kapi_manager/admin/products');
   }
