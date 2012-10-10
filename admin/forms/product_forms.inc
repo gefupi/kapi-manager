@@ -162,21 +162,14 @@ function _kapi_manager_edit_product_form_validate($form, &$form_state) {
     form_set_error('product_name', t("The product '@product_name' already exists.",
       array('@product_name' => $product_name)));
   }
-  $dependencies = _kapi_manager_product_forms_get_depedencies_from_edit_form($form, $form_state);
+  $dependencies = _kapi_manager_product_forms_get_depedencies_from_edit_form($form, $form_state, $old_name);
   
-  print_r($form_state['values']);
-  /*
-  $dep1_n = $form_state['values']['dependency_1'];
-  $dep1_f = $form_state['values']['factor_1'];
-  form_set_error('', t("[DEBUG]: Dependency 1 has name @dep_n and factor @dep_f", 
-    array('@dep_n' => $dep1_n, '@dep_f' => $dep1_f)));
-*/
 }
 
 /**
  * @todo: documentation
  */
-function _kapi_manager_product_forms_get_depedencies_from_edit_form($form, $form_state) {
+function _kapi_manager_product_forms_get_depedencies_from_edit_form($form, $form_state, $product) {
   $result = array();
   for($i=1; $i < 6; $i++) {
     $dependency_index = $form_state['values']['dependency_' . $i];
@@ -191,19 +184,41 @@ function _kapi_manager_product_forms_get_depedencies_from_edit_form($form, $form
         );
       } else if (! is_numeric($factor)) {
         form_set_error('factor_' . $i, 
-          t("Factor for dependency @i must be numeric.",
-	    array('@i' => $i))
+          t("Factor for dependency @i (@product) must be numeric.",
+	    array('@i' => $i, '@product' => $dependency))
         );
       } else if ($factor <= 0) {
         form_set_error('factor_' . $i, 
-          t("Factor for dependency @i must be greater than zero.",
-          array('@i' => $i))
+          t("Factor for dependency @i (@product) must be greater than zero.",
+          array('@i' => $i, '@product' => $dependency))
+        );
+      }
+      // validate product not selected as own dependency
+      if ($dependency === $product) {
+        form_set_error('dependency_' . $i, 
+          t("The product (@product) cannot be selected as it's own dependency "
+            . "@i (even if you try to renamed it in the same step).",
+            array('@i' => $i, '@product' => $product)
+          )
         );
       }
     }
-    $result[$i] = array('dependency' => $dependency, 'factor' => $factor);
+    $result[$i] = array('name' => $dependency, 'factor' => $factor, 'index' => $dependency_index);
   }
   /* @todo: check wether a product is coosen twice as dependency */
+  for ($i=1; $i < 6; $i++) {
+    for ($j=1; $j < 6; $j++) {
+      if (! ($i < $j)) {continue;}
+      if (($result[$i]['index'] === '0') or ($result[$j]['index'] === '0')) {continue;}
+      if ($result[$i]['index'] === $result[$j]['index']) {
+        // found a product as dependency twice
+        form_set_error('dependency_' . $i, t("@product is selected as dependency @i",
+        array('@i' => $i, '@product' => $result[$i]['name'])));
+        form_set_error('dependency_' . $j, t("and @product is also selected as dependency @j",
+        array('@j' => $j, '@product' => $result[$i]['name'])));
+      }
+    }
+  }
   
   return $result;
 }
