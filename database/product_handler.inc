@@ -44,6 +44,21 @@ function _kapi_manager_db_get_h_products() {
 }
 
 /**
+ * This function returns the id of the product with given name.
+ *
+ * @para name
+ *   name of the product
+ * @return string
+ */
+function _kapi_manager_db_get_product_id($name) {
+  return db_select('kapi_manager_products', 'p')
+    ->fields('p', array('id'))
+    ->condition('name', $id, 'LIKE')
+    ->execute()
+    ->fetchField();
+}
+
+/**
  * This function returns the name of the product with given ID.
  *
  * @para id
