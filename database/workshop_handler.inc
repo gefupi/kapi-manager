@@ -65,6 +65,21 @@ function _kapi_manager_db_insert_workshop($name) {
 }
 
 /**
+ * This function returns the ID of the workshop with given name.
+ *
+ * @para $name
+ *   name of the workshop
+ * @return string
+ */
+function _kapi_manager_db_get_workshop_id($name) {
+  return db_select('kapi_manager_workshops', 'w')
+    ->fields('w', array('id'))
+    ->condition('name', $name, 'LIKE')
+    ->execute()
+    ->fetchField();
+}
+
+/**
  * This function returns the name of the workshop with given ID.
  *
  * @para id
