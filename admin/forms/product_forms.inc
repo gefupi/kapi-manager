@@ -4,6 +4,11 @@
  * This file provides the forms used in product administration context.
  */
 
+
+// @todo: all select options arrays should be sorted with sort. The default_value
+//        must be detected afterwards using name not index of item.
+
+
 /**
  * This function implements the form for the 'edit product form'.
  *
@@ -124,6 +129,7 @@ function _kapi_manager_add_workshop_selection_to_form(&$form) {
     $workshop_options[] = $workshop->name;
   }
 
+
   $form['workshop'] = array(
     '#title'         => t('Workshop'),
     '#type'          => 'select',
@@ -156,42 +162,49 @@ function _kapi_manager_edit_product_form_validate($form, &$form_state) {
     form_set_error('product_name', t("The product '@product_name' already exists.",
       array('@product_name' => $product_name)));
   }
-  $dependencies = _kapi_manager_product_forms_get_depedencies_from_edit_form($form_state);
+  $dependencies = _kapi_manager_product_forms_get_depedencies_from_edit_form($form, $form_state);
   
   print_r($form_state['values']);
-  
+  /*
   $dep1_n = $form_state['values']['dependency_1'];
   $dep1_f = $form_state['values']['factor_1'];
-  form_set_error('dependency_group_1', t("[DEBUG]: Dependency 1 has name @dep_n and factor @dep_f", 
+  form_set_error('', t("[DEBUG]: Dependency 1 has name @dep_n and factor @dep_f", 
     array('@dep_n' => $dep1_n, '@dep_f' => $dep1_f)));
+*/
 }
 
 /**
  * @todo: documentation
  */
-function _kapi_manager_product_forms_get_depedencies_from_edit_form($form_state) {
+function _kapi_manager_product_forms_get_depedencies_from_edit_form($form, $form_state) {
   $result = array();
   for($i=1; $i < 6; $i++) {
-    $dependency = $form_state['values']['dependency_' . $i];
+    $dependency_index = $form_state['values']['dependency_' . $i];
+    $dependency = $form['dependency_group_' . $i]['dependency_' . $i]['#options'][$dependency_index];
     $factor = $form_state['values']['factor_' . $i];
-    if ($dependency != 0) {
+    if ($dependency_index != 0) {
+      // validate factor input
       if ($factor === ''){
         form_set_error('factor_' . $i, 
-          t("Factor for dependency @i must be given if a product is choosen.", 
-          array('@i' => $i))
+          t("Missing factor for dependency @i (@product).", 
+          array('@i' => $i, '@product' => $dependency))
         );
-      } else if (! is_numeric($factor) {
+      } else if (! is_numeric($factor)) {
         form_set_error('factor_' . $i, 
           t("Factor for dependency @i must be numeric.",
-          array('@i' => $i))
+	    array('@i' => $i))
+        );
       } else if ($factor <= 0) {
         form_set_error('factor_' . $i, 
           t("Factor for dependency @i must be greater than zero.",
           array('@i' => $i))
+        );
       }
-    result[$i] = array('dependency_id' => $dependency, 'factor' => $factor);
+    }
+    $result[$i] = array('dependency' => $dependency, 'factor' => $factor);
   }
   /* @todo: check wether a product is coosen twice as dependency */
+  
   return $result;
 }
 
@@ -215,11 +228,12 @@ function _kapi_manager_edit_product_form_submit($form, &$form_state) {
 // @todo: check wich workshop is chosen and whether it is changed
   $new_name = $form_state['values']['product_name'];
   $old_name = $form['product_name']['#default_value'];
-  $new_workshop = $form_state['values']['workshop'];
-  $old_workshop = $form['workshop']['#default_value'];
+  $new_workshop_index = $form_state['values']['workshop'];
+  $old_workshop_index = $form['workshop']['#default_value'];
+  $workshop = $form['workshop']['#options'][$new_workshop_index];
   module_load_include('inc', 'kapi_manager', 'database/product_handler');
   $changed_name = !($old_name === $new_name);
-  $changed_workshop = !($old_workshop === $new_workshop);
+  $changed_workshop = !($old_workshop_index === $new_workshop_index);
   if (!$changed_name) {
     drupal_goto('kapi_manager/admin/products');
   }
@@ -237,8 +251,8 @@ function _kapi_manager_edit_product_form_submit($form, &$form_state) {
   }
   else {
     _kapi_manager_db_insert_product($new_name);
-    drupal_set_message($message = t("Added product '@product_name'",
-      array('@product_name' => $new_name)), $type = 'status');
+    drupal_set_message($message = t("Added product '@product_name' with workshop '@workshop'",
+      array('@product_name' => $new_name, '@workshop' => $workshop)), $type = 'status');
   }
   drupal_goto('kapi_manager/admin/products');
 }
