@@ -140,7 +140,6 @@ function _kapi_manager_add_workshop_selection_to_form(&$form) {
   );
 }
 
-
 /**
  * This function implements validation for the 'edit product form'.
  *
@@ -162,67 +161,62 @@ function _kapi_manager_edit_product_form_validate($form, &$form_state) {
     form_set_error('product_name', t("The product '@product_name' already exists.",
       array('@product_name' => $product_name)));
   }
-  $dependencies = _kapi_manager_product_forms_get_depedencies_from_edit_form($form, $form_state, $old_name);
-  
+  _kapi_manager_edit_product_form_validate_dependencies($form, $form_state, $old_name);
 }
 
 /**
+ * This function is used to vaildate the dependencies
+ *
  * @todo: documentation
  */
-function _kapi_manager_product_forms_get_depedencies_from_edit_form($form, $form_state, $product) {
-  $result = array();
+function _kapi_manager_edit_product_form_validate_dependencies($form, $form_state, $product) {
+  $dependencies = array();
   for($i=1; $i < 6; $i++) {
     $dependency_index = $form_state['values']['dependency_' . $i];
     $dependency = $form['dependency_group_' . $i]['dependency_' . $i]['#options'][$dependency_index];
     $factor = $form_state['values']['factor_' . $i];
     if ($dependency_index != 0) {
-      // validate factor input
       if ($factor === ''){
-        form_set_error('factor_' . $i, 
-          t("Missing factor for dependency @i (@product).", 
-          array('@i' => $i, '@product' => $dependency))
-        );
+	// factor is empty 
+        $message = t("Missing factor for dependency @i (@product).", 
+	  array('@i' => $i, '@product' => $dependency));
+	form_set_error('factor_' . $i, $message);
       } else if (! is_numeric($factor)) {
-        form_set_error('factor_' . $i, 
-          t("Factor for dependency @i (@product) must be numeric.",
-	    array('@i' => $i, '@product' => $dependency))
-        );
+        // factor is not a valid number
+        $message = t("Factor for dependency @i (@product) must be numeric.",
+          array('@i' => $i, '@product' => $dependency));
+        form_set_error('factor_' . $i, $message);
       } else if ($factor <= 0) {
-        form_set_error('factor_' . $i, 
-          t("Factor for dependency @i (@product) must be greater than zero.",
-          array('@i' => $i, '@product' => $dependency))
-        );
+        // factor is less than or equal zero
+        $message = t("Factor for dependency @i (@product) must be greater than "
+          . "zero.", array('@i' => $i, '@product' => $dependency));
+        form_set_error('factor_' . $i, $message);
       }
-      // validate product not selected as own dependency
       if ($dependency === $product) {
-        form_set_error('dependency_' . $i, 
-          t("The product (@product) cannot be selected as it's own dependency "
-            . "@i (even if you try to renamed it in the same step).",
-            array('@i' => $i, '@product' => $product)
-          )
-        );
+        // dependency equals edited product
+        $message = t("The product (@product) cannot be selected as it's own "
+          . "dependency @i (even if you try to renamed it in the same step).",
+          array('@i' => $i, '@product' => $product));
+        form_set_error('dependency_' . $i, $message);
       }
     }
-    $result[$i] = array('name' => $dependency, 'factor' => $factor, 'index' => $dependency_index);
+    $dependencies[$i] = array('name' => $dependency, 'index' => $dependency_index);
   }
-  /* @todo: check wether a product is coosen twice as dependency */
+  // check that each dependency product is selected only once as dependency
   for ($i=1; $i < 6; $i++) {
     for ($j=1; $j < 6; $j++) {
       if (! ($i < $j)) {continue;}
-      if (($result[$i]['index'] === '0') or ($result[$j]['index'] === '0')) {continue;}
-      if ($result[$i]['index'] === $result[$j]['index']) {
+      if (($dependencies[$i]['index'] === '0') or ($dependencies[$j]['index'] === '0')) {continue;}
+      if ($dependencies[$i]['index'] === $dependencies[$j]['index']) {
         // found a product as dependency twice
         form_set_error('dependency_' . $i, t("@product is selected as dependency @i",
-        array('@i' => $i, '@product' => $result[$i]['name'])));
+        array('@i' => $i, '@product' => $dependencies[$i]['name'])));
         form_set_error('dependency_' . $j, t("and @product is also selected as dependency @j",
-        array('@j' => $j, '@product' => $result[$i]['name'])));
+        array('@j' => $j, '@product' => $dependencies[$i]['name'])));
       }
     }
   }
-  
-  return $result;
 }
-
 
 /**
  * This function implements submit actions for the 'edit product form'.
