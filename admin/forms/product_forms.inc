@@ -224,27 +224,24 @@ function _kapi_manager_edit_product_form_validate_dependencies($form, $form_stat
 function _kapi_manager_edit_product_form_read_values($form, $form_state) {
   module_load_include('inc', 'kapi_manager', 'database/product_handler');
   module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
-
+  // gather product info
   $old_name = $form['product_name']['#default_value'];
   $product = array(
     'name' => $form_state['values']['product_name'],
     'id'   => _kapi_manager_db_get_product_id($old_name)
   );
-  $product['changed']  = !($old_name === $product['name']);
   if($old_name === '') {
     $product['existed'] = 'false';
   } else {
     $product['existed'] = 'true';
   }
-
+  //gather workshop info
+  $index = $form_state['values']['workshop'];
+  $name = $form['workshop']['#options'][$index];
   $workshop = array(
-    'old_index' => $form['workshop']['#default_value'],
-    'new_index' => $form_state['values']['workshop'],
+    'id' => _kapi_manager_db_get_workshop_id($name),
   );
-  $workshop['changed'] = !($workshop['old_index'] === $workshop['new_index']);
-  $workshop['name'] = $form['workshop']['#options'][$workshop['new_index']];
-  $workshop['id'] = _kapi_manager_db_get_workshop_id($workshop['name']);
-
+  // gather dependency info
   $dependencies = array();
   for($i = 1; $i < 6; $i++){
     $dependency_index = $form_state['values']['dependency_' . $i];
@@ -253,12 +250,11 @@ function _kapi_manager_edit_product_form_read_values($form, $form_state) {
       $factor = $form_state['values']['factor_' . $i];
       $dependency_id = _kapi_manager_db_get_product_id($dependency_name);
       $dependencies[] = array(
-        'dependency_id' => $dependency_id,
-        'factor'        => $factor
+        'id'     => $dependency_id,
+        'factor' => $factor
       );
     }
   }
-
   return array($product, $workshop, $dependencies);
 }
 
@@ -288,14 +284,12 @@ function _kapi_manager_edit_product_form_submit($form, &$form_state) {
     // update existing product
     _kapi_manager_db_update_product($product['id'], $product['name'], $workshop['id']);
   }
-  // @todo: update/set dependencies in database
-  
-
+  // set dependencies in database
+  _kapi_manager_db_set_dependencies($product['id'], $dependencies);  
   drupal_set_message($message = t("Saved product '@product' successful.", 
     array('@product' => $product['name'])), $type = 'status');
   drupal_goto('kapi_manager/admin/products');
 }
-
 
 /**
  * This function implements the confirm form for delete product action.
