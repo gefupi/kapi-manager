@@ -115,7 +115,7 @@ function _kapi_manager_db_insert_product($product_name, $workshop_id) {
 }
 
 /**
- * This function updates a in table product.
+ * This function updates a row in table product.
  *
  * @param $product_id
  *   the product id of product to update
@@ -134,6 +134,21 @@ function _kapi_manager_db_update_product($product_id, $product_name, $workshop_i
       'workshop_id' => $workshop_id,
     ))
     ->condition('id', $product_id, '=')
+    ->execute();
+  return $result;
+}
+
+/**
+ * This function deletes a row in table product.
+ *
+ * @param $product_id
+ *   the product id of product to delete
+ * @return
+ *   An array containing the result set
+ */
+function _kapi_manager_db_delete_product($product_id) {
+  $result = db_delete('kapi_manager_products')
+    ->condition('id', $product_id)
     ->execute();
   return $result;
 }
