@@ -231,9 +231,9 @@ function _kapi_manager_edit_product_form_read_values($form, $form_state) {
     'id'   => _kapi_manager_db_get_product_id($old_name)
   );
   if($old_name === '') {
-    $product['existed'] = 'false';
+    $product['existed'] = FALSE;
   } else {
-    $product['existed'] = 'true';
+    $product['existed'] = TRUE;
   }
   //gather workshop info
   $index = $form_state['values']['workshop'];
@@ -277,12 +277,12 @@ function _kapi_manager_edit_product_form_read_values($form, $form_state) {
 function _kapi_manager_edit_product_form_submit($form, &$form_state) {
   module_load_include('inc', 'kapi_manager', 'database/product_handler');
   list($product, $workshop, $dependencies) = _kapi_manager_edit_product_form_read_values($form, $form_state);
-  if ($product['existed'] === 'false') {
-    // add a new product
-    _kapi_manager_db_insert_product($product['name'], $workshop['id']);
-  } else {
+  if ($product['existed']) {
     // update existing product
     _kapi_manager_db_update_product($product['id'], $product['name'], $workshop['id']);
+  } else {
+    // add a new product
+    _kapi_manager_db_insert_product($product['name'], $workshop['id']);
   }
   // set dependencies in database
   _kapi_manager_db_set_dependencies($product['id'], $dependencies);  
