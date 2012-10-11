@@ -82,29 +82,39 @@ function _kapi_manager_db_get_product_name($id) {
  * @return boolean
  */
 function _kapi_manager_db_exists_product($product_name) {
-  $query = db_select('kapi_manager_products', 'p')
+  $result = db_select('kapi_manager_products', 'p')
     ->fields('p', array('name'))
     ->condition('name', $product_name, 'LIKE')
     ->execute()
     ->fetchField();
-  if ($query === $product_name) {
+  if ($result === $product_name) {
     return TRUE;
   }
   return FALSE;
 }
 
-/*
- * TODO: Documentation
+/**
+ * This function insert a new row into the product table.
+ *
+ * @param $product_name
+ *   string containing the name of the new product
+ * @param $workshop_id
+ *   workshop id for the product
  */
-function _kapi_manager_db_insert_product($product_name) {
-  // TODO: implement this function
-
+function _kapi_manager_db_insert_product($product_name, $workshop_id) {
+  $result = db_insert('kapi_manager_products')
+    ->fields(array(
+      'name'        => $product_name,
+      'workshop_id' => $workshop_id,
+    ))
+    ->execute();
+  return $result;
 }
 
 /*
  * TODO: Documentation
  */
-function _kapi_manager_db_update_product($product_name) {
+function _kapi_manager_db_update_product($product_id, $product_name, $workshop_id) {
   // TODO: implement this function
 
 }
