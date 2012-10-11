@@ -68,7 +68,7 @@ function _kapi_manager_db_get_product_id($name) {
 function _kapi_manager_db_get_product_name($id) {
   return db_select('kapi_manager_products', 'p')
     ->fields('p', array('name'))
-    ->condition('id', $id, 'LIKE')
+    ->condition('id', $id, '=')
     ->execute()
     ->fetchField();
 }
@@ -100,6 +100,9 @@ function _kapi_manager_db_exists_product($product_name) {
  *   string containing the name of the new product
  * @param $workshop_id
  *   workshop id for the product
+ *
+ * @return
+ *   An array containing the result set
  */
 function _kapi_manager_db_insert_product($product_name, $workshop_id) {
   $result = db_insert('kapi_manager_products')
@@ -111,10 +114,26 @@ function _kapi_manager_db_insert_product($product_name, $workshop_id) {
   return $result;
 }
 
-/*
- * TODO: Documentation
+/**
+ * This function updates a in table product.
+ *
+ * @param $product_id
+ *   the product id of product to update
+ * @param $product_name
+ *   string containing the product name
+ * @param $workshop_id
+ *   workshop id for the product
+ *
+ * @return
+ *   An array containing the result set
  */
 function _kapi_manager_db_update_product($product_id, $product_name, $workshop_id) {
-  // TODO: implement this function
-
+  $result = db_update('kapi_manager_products')
+    ->fields(array(
+      'name'        => $product_name,
+      'workshop_id' => $workshop_id,
+    ))
+    ->condition('id', $product_id, '=')
+    ->execute();
+  return $result;
 }
