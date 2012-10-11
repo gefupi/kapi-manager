@@ -45,7 +45,8 @@ function _kapi_manager_edit_product_form($node, &$form_state, $product_id) {
     module_load_include('inc', 'kapi_manager', 'database/dependency_handler');
     $product = _kapi_manager_db_get_products($product_id)->fetchObject();
     $form['product_name']['#default_value'] = $product->name;
-    $form['workshop']['#default_value'] = $product->workshop_id;
+    $workshop = _kapi_manager_db_get_workshop_name($product->workshop_id);
+    $form['workshop']['#default_value'] = array_search($workshop, $form['workshop']['#options']);
     $dependencies = _kapi_manager_db_get_dependencies($product_id);
     $counter = 1;
     foreach ($dependencies as $dependency) {
@@ -123,12 +124,16 @@ function _kapi_manager_add_dependency_selections_to_form(&$form) {
  */
 function _kapi_manager_add_workshop_selection_to_form(&$form) {
   module_load_include('inc', 'kapi_manager', 'database/workshop_handler');
-  $workshop_options = array(t('--- SELECT ---'));
   $workshops = _kapi_manager_db_get_workshops();
-   foreach($workshops as $workshop) {
-    $workshop_options[] = $workshop->name;
+  $sorted_workshops = array();
+  foreach($workshops as $workshop) {
+    $sorted_workshops[] = $workshop->name;
   }
-
+  sort($sorted_workshops, SORT_STRING);
+  $workshop_options = array(t('--- SELECT ---'));
+  foreach($sorted_workshops as $workshop) {
+    $workshop_options[] = $workshop;
+  }
 
   $form['workshop'] = array(
     '#title'         => t('Workshop'),
