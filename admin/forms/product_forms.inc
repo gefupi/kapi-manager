@@ -228,7 +228,7 @@ function _kapi_manager_edit_product_form_read_values($form, $form_state) {
   $old_name = $form['product_name']['#default_value'];
   $product = array(
     'name' => $form_state['values']['product_name'],
-    'id'       => _kapi_manager_db_get_product_id($old_name)
+    'id'   => _kapi_manager_db_get_product_id($old_name)
   );
   $product['changed']  = !($old_name === $product['name']);
   if($old_name === '') {
@@ -321,7 +321,9 @@ function _kapi_manager_delete_product_confirm_form($form, &$form_state, $product
   );
 
   return confirm_form($form,
-    t("Are you sure you want to delete product '@product_name'?", array('@product_name' => $name)),
+    t("Are you sure you want to delete product '@product_name'? "
+      . "WARNING: This may result in corupt data.", 
+      array('@product_name' => $name)),
     'kapi_manager/admin/products',
     t('This action cannot be undone.'),
     t('Delete'),
@@ -340,7 +342,8 @@ function _kapi_manager_delete_product_confirm_form($form, &$form_state, $product
 function _kapi_manager_delete_product_confirm_form_submit($form, &$form_state) {
   $name = $form_state['values']['product_name'];
   module_load_include('inc', 'kapi_manager', 'database/product_handler');
-  _kapi_manager_db_delete_product($name);
+  $id = _kapi_manager_db_get_product_id($name);
+  _kapi_manager_db_delete_product($id);
   drupal_set_message($message = t("Deleted product '@product_name'",
     array('@product_name' => $name)), $type = 'status');
   drupal_goto('kapi_manager/admin/products');
